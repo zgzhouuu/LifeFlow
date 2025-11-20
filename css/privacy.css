@@ -1,0 +1,410 @@
+/**
+ * Privacy and Security Styles
+ * 隐私和安全功能样式
+ */
+
+/* 对话框遮罩层 */
+.privacy-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.privacy-dialog-overlay.show {
+  opacity: 1;
+}
+
+/* 对话框主体 */
+.privacy-dialog {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.privacy-dialog-overlay.show .privacy-dialog {
+  transform: scale(1);
+}
+
+/* 对话框头部 */
+.privacy-dialog-header {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.privacy-dialog-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.privacy-dialog-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.privacy-dialog-close:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* 对话框主体内容 */
+.privacy-dialog-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.privacy-dialog-description {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* 举报原因列表 */
+.report-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.report-reason-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.report-reason-item:hover {
+  border-color: #4CAF50;
+  background-color: #f5f5f5;
+}
+
+.report-reason-item input[type="radio"] {
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.report-reason-item input[type="radio"]:checked ~ .reason-text {
+  font-weight: 600;
+  color: #4CAF50;
+}
+
+.report-reason-item:has(input[type="radio"]:checked) {
+  border-color: #4CAF50;
+  background-color: #e8f5e9;
+}
+
+.reason-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.reason-text {
+  flex: 1;
+  font-size: 15px;
+  color: #333;
+}
+
+/* 举报详情输入 */
+.report-details {
+  margin-top: 16px;
+}
+
+.details-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.details-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.details-textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* 对话框底部 */
+.privacy-dialog-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* 按钮样式 */
+.privacy-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.privacy-btn-primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.privacy-btn-primary:hover {
+  background-color: #45a049;
+}
+
+.privacy-btn-secondary {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.privacy-btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.privacy-btn-small {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+/* 黑名单列表 */
+.blocklist-empty {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.blocklist-empty .empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.blocklist-empty .empty-text {
+  color: #999;
+  font-size: 14px;
+  margin: 0;
+}
+
+.blocklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.blocklist-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.blocklist-item:hover {
+  background-color: #f0f0f0;
+}
+
+.blocklist-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.blocklist-avatar .avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blocklist-avatar .avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0e0e0;
+  font-size: 24px;
+}
+
+.blocklist-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.blocklist-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blocklist-id {
+  font-size: 13px;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 长按菜单样式 */
+.context-menu {
+  position: fixed;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 150px;
+  z-index: 9999;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.2s ease;
+}
+
+.context-menu.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+}
+
+.context-menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.context-menu-item.danger {
+  color: #f44336;
+}
+
+.context-menu-item.danger:hover {
+  background-color: #ffebee;
+}
+
+.context-menu-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .privacy-dialog {
+    max-width: 100%;
+    width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .privacy-dialog-header {
+    padding: 16px;
+  }
+
+  .privacy-dialog-title {
+    font-size: 16px;
+  }
+
+  .privacy-dialog-body {
+    padding: 16px;
+  }
+
+  .privacy-dialog-footer {
+    padding: 12px 16px;
+  }
+
+  .report-reason-item {
+    padding: 10px;
+  }
+
+  .reason-text {
+    font-size: 14px;
+  }
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.privacy-dialog-overlay {
+  animation: fadeIn 0.3s ease;
+}
+
+.privacy-dialog {
+  animation: slideUp 0.3s ease;
+}

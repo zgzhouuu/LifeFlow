@@ -1,0 +1,580 @@
+/**
+ * PostCard Component Styles
+ * 动态卡片组件样式
+ */
+
+/* 动态卡片容器 */
+.post-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.3s ease;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* 成就分享卡片特殊样式（金色边框） */
+.post-card-achievement {
+  border: 2px solid #FFD700;
+  background: linear-gradient(to bottom, #FFFEF7, white);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 动态头部 */
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* 作者头像 */
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 作者信息 */
+.author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.author-name {
+  font-weight: 600;
+  color: #2C3E50;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-time {
+  font-size: 13px;
+  color: #7F8C8D;
+}
+
+/* 动态菜单 */
+.post-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.post-menu-btn,
+.post-report-btn {
+  background: transparent;
+  border: none;
+  color: #7F8C8D;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-menu-btn:hover,
+.post-report-btn:hover {
+  background: #F5F7FA;
+  color: #2C3E50;
+}
+
+.post-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  z-index: 100;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: white;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 14px;
+  color: #2C3E50;
+}
+
+.menu-item:hover {
+  background: #F5F7FA;
+}
+
+/* 动态内容 */
+.post-content {
+  margin-bottom: 16px;
+}
+
+.post-text {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+  color: #2C3E50;
+  font-size: 15px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* 成就分享特殊样式（金色边框） */
+.post-achievement {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #FFF5E6, #FFE8CC);
+  border: 2px solid #FFD700;
+  border-radius: 8px;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+}
+
+.achievement-icon {
+  font-size: 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.achievement-text {
+  font-weight: 600;
+  color: #D4AF37;
+  font-size: 14px;
+}
+
+/* 图片网格布局 */
+.post-images {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 1张图片：居中大图 */
+.post-images.single {
+  grid-template-columns: 1fr;
+  max-width: 400px;
+}
+
+/* 2-4张图片：2x2网格 */
+.post-images.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* 5-9张图片：3x3网格 */
+.post-images.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.post-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #F5F7FA;
+}
+
+.post-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-image-wrapper:hover img {
+  transform: scale(1.05);
+}
+
+/* 标签（蓝色高亮） */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.post-tag {
+  padding: 4px 12px;
+  background: #667eea;
+  color: white;
+  border-radius: 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-weight: 500;
+}
+
+.post-tag:hover {
+  background: #5568d3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+/* 点赞和评论按钮 */
+.post-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #E0E6ED;
+}
+
+.post-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #F5F7FA;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  color: #2C3E50;
+  min-height: 44px;
+}
+
+.post-action-btn:hover {
+  background: #E8EBF0;
+  transform: translateY(-1px);
+}
+
+.post-action-btn:active {
+  transform: translateY(0);
+}
+
+/* 已点赞状态 */
+.post-action-btn.liked {
+  background: #FFE8E8;
+  color: #E74C3C;
+}
+
+.post-action-btn.liked .action-icon {
+  animation: heartBeat 0.3s ease;
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.action-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.action-text {
+  font-weight: 500;
+}
+
+/* 评论区域 */
+.post-comments {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #E0E6ED;
+}
+
+.post-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+.comment-content {
+  color: #2C3E50;
+  flex: 1;
+  word-wrap: break-word;
+  min-width: 0;
+}
+
+.comment-delete-btn {
+  background: transparent;
+  border: none;
+  color: #E74C3C;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  min-height: 28px;
+}
+
+.comment-delete-btn:hover {
+  background: #FFE8E8;
+}
+
+.view-all-comments {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  background: transparent;
+  border: none;
+  color: #667eea;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  min-height: 36px;
+}
+
+.view-all-comments:hover {
+  background: #F5F7FA;
+}
+
+/* 响应式设计 - 平板 */
+@media (max-width: 768px) {
+  .post-card {
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+  }
+
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .author-name {
+    font-size: 14px;
+  }
+
+  .post-text {
+    font-size: 14px;
+  }
+
+  .post-images.single {
+    max-width: 100%;
+  }
+
+  .post-action-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .action-icon {
+    font-size: 16px;
+  }
+}
+
+/* 响应式设计 - 移动端 */
+@media (max-width: 480px) {
+  .post-card {
+    padding: 12px;
+  }
+
+  .post-header {
+    margin-bottom: 12px;
+  }
+
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .author-name {
+    font-size: 13px;
+  }
+
+  .post-time {
+    font-size: 12px;
+  }
+
+  .post-text {
+    font-size: 13px;
+  }
+
+  .post-actions {
+    gap: 12px;
+  }
+
+  .post-action-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .action-icon {
+    font-size: 14px;
+  }
+
+  .post-tag {
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+
+  .post-achievement {
+    padding: 10px 12px;
+  }
+
+  .achievement-icon {
+    font-size: 20px;
+  }
+
+  .achievement-text {
+    font-size: 13px;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .post-action-btn,
+  .post-tag,
+  .post-image-wrapper,
+  .post-menu-btn,
+  .post-report-btn {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .post-action-btn:active {
+    transform: scale(0.95);
+  }
+
+  .post-tag:active {
+    transform: scale(0.95);
+  }
+
+  .post-image-wrapper:active {
+    opacity: 0.8;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .post-card {
+    box-shadow: none;
+    border: 1px solid #E0E6ED;
+    page-break-inside: avoid;
+  }
+
+  .post-menu,
+  .post-report-btn,
+  .post-actions {
+    display: none;
+  }
+}
+
+/* 暗色模式支持（可选） */
+@media (prefers-color-scheme: dark) {
+  .post-card {
+    background: #1E1E1E;
+    color: #E0E0E0;
+  }
+
+  .author-name,
+  .post-text,
+  .comment-content {
+    color: #E0E0E0;
+  }
+
+  .post-time {
+    color: #A0A0A0;
+  }
+
+  .post-action-btn {
+    background: #2A2A2A;
+    color: #E0E0E0;
+  }
+
+  .post-action-btn:hover {
+    background: #3A3A3A;
+  }
+
+  .post-menu-btn:hover,
+  .post-report-btn:hover {
+    background: #2A2A2A;
+  }
+
+  .post-menu-dropdown {
+    background: #2A2A2A;
+  }
+
+  .menu-item {
+    background: #2A2A2A;
+    color: #E0E0E0;
+  }
+
+  .menu-item:hover {
+    background: #3A3A3A;
+  }
+}

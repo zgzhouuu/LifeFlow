@@ -1,0 +1,712 @@
+/**
+ * PostEditor Component Styles
+ * 动态发布编辑器样式
+ */
+
+/* ==================== 编辑器容器 ==================== */
+
+.post-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ==================== 文字输入区 ==================== */
+
+.post-editor-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px;
+  border: 2px solid #E0E6ED;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  color: #2C3E50;
+  resize: vertical;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.post-editor-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.post-editor-textarea::placeholder {
+  color: #95A5A6;
+}
+
+/* ==================== 字符计数 ==================== */
+
+.post-editor-char-count {
+  text-align: right;
+  font-size: 13px;
+  color: #7F8C8D;
+  font-weight: 500;
+  margin-top: -8px;
+}
+
+/* ==================== 图片预览区 ==================== */
+
+.post-editor-images {
+  padding: 16px;
+  background: #F5F7FA;
+  border-radius: 12px;
+}
+
+.post-editor-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.image-preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #E0E6ED;
+}
+
+.image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.image-remove-btn:hover {
+  background: #E74C3C;
+  transform: scale(1.1);
+}
+
+/* ==================== 成就预览区 ==================== */
+
+.post-editor-achievement {
+  padding: 16px;
+  background: linear-gradient(135deg, #FFF5E6 0%, #FFE8CC 100%);
+  border: 2px solid #FFD700;
+  border-radius: 12px;
+}
+
+.achievement-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.achievement-preview-icon {
+  font-size: 48px;
+  flex-shrink: 0;
+}
+
+.achievement-preview-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-preview-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2C3E50;
+  margin-bottom: 4px;
+}
+
+.achievement-preview-desc {
+  font-size: 14px;
+  color: #7F8C8D;
+}
+
+.achievement-remove-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.achievement-remove-btn:hover {
+  background: #E74C3C;
+  transform: scale(1.1);
+}
+
+/* ==================== 标签显示区 ==================== */
+
+.post-editor-tags {
+  padding: 12px 16px;
+  background: #F5F7FA;
+  border-radius: 12px;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #667eea;
+  color: white;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tag-remove-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+  transition: all 0.2s ease;
+}
+
+.tag-remove-btn:hover {
+  transform: scale(1.2);
+}
+
+/* ==================== 可见范围显示 ==================== */
+
+.post-editor-visibility {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #F5F7FA;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.visibility-label {
+  color: #7F8C8D;
+  font-weight: 500;
+}
+
+.visibility-value {
+  color: #2C3E50;
+  font-weight: 600;
+}
+
+/* ==================== 操作按钮区 ==================== */
+
+.post-editor-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.editor-action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.editor-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #F5F7FA;
+  border: 1px solid #E0E6ED;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2C3E50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.editor-action-btn:hover {
+  background: #E8EBF0;
+  border-color: #CBD5E0;
+  transform: translateY(-2px);
+}
+
+.editor-action-btn .btn-icon {
+  font-size: 18px;
+}
+
+.editor-publish-btn {
+  padding: 10px 32px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.editor-publish-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.editor-publish-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==================== 对话框样式 ==================== */
+
+.post-editor-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.dialog-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-content {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #E0E6ED;
+}
+
+.dialog-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2C3E50;
+}
+
+.dialog-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #F5F7FA;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: #7F8C8D;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dialog-close-btn:hover {
+  background: #E8EBF0;
+  color: #2C3E50;
+}
+
+.dialog-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dialog-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #E0E6ED;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ==================== 成就列表 ==================== */
+
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #F5F7FA;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.achievement-item:hover {
+  background: #E8EBF0;
+  transform: translateX(4px);
+}
+
+.achievement-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.achievement-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2C3E50;
+  margin-bottom: 4px;
+}
+
+.achievement-desc {
+  font-size: 14px;
+  color: #7F8C8D;
+}
+
+/* ==================== 标签输入 ==================== */
+
+.tag-input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tag-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid #E0E6ED;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2C3E50;
+  transition: all 0.3s ease;
+}
+
+.tag-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.tag-add-btn {
+  padding: 10px 20px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tag-add-btn:hover {
+  background: #5568d3;
+}
+
+.predefined-tags h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #7F8C8D;
+  font-weight: 600;
+}
+
+.tags-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.tag-option {
+  padding: 8px 12px;
+  background: #F5F7FA;
+  border: 2px solid #E0E6ED;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #2C3E50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.tag-option:hover {
+  background: #E8EBF0;
+  border-color: #CBD5E0;
+}
+
+.tag-option.selected {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.dialog-confirm-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dialog-confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* ==================== 可见范围选项 ==================== */
+
+.visibility-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.visibility-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #F5F7FA;
+  border: 2px solid #E0E6ED;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.visibility-option:hover {
+  background: #E8EBF0;
+  border-color: #CBD5E0;
+}
+
+.visibility-option.selected {
+  background: #EEF2FF;
+  border-color: #667eea;
+}
+
+.visibility-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.visibility-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.visibility-option .visibility-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2C3E50;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.visibility-option .visibility-desc {
+  font-size: 13px;
+  color: #7F8C8D;
+}
+
+.visibility-check {
+  font-size: 24px;
+  color: #667eea;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.visibility-option.selected .visibility-check {
+  opacity: 1;
+}
+
+/* ==================== 响应式设计 ==================== */
+
+@media (max-width: 768px) {
+  .post-editor-textarea {
+    min-height: 100px;
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .post-editor-images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+
+  .editor-action-btn .btn-text {
+    display: none;
+  }
+
+  .editor-action-btn {
+    padding: 10px;
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  .editor-action-btn .btn-icon {
+    font-size: 20px;
+  }
+
+  .editor-publish-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .dialog-content {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 16px 16px 0 0;
+    max-height: 90vh;
+  }
+
+  .dialog-header {
+    padding: 16px 20px;
+  }
+
+  .dialog-body {
+    padding: 20px;
+  }
+
+  .achievement-icon {
+    font-size: 32px;
+  }
+
+  .achievement-name {
+    font-size: 15px;
+  }
+
+  .achievement-desc {
+    font-size: 13px;
+  }
+
+  .tags-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .visibility-icon {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 576px) {
+  .post-editor-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .editor-action-buttons {
+    justify-content: space-between;
+  }
+
+  .editor-action-btn {
+    flex: 1;
+  }
+
+  .editor-publish-btn {
+    width: 100%;
+  }
+
+  .post-editor-images-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ==================== 触摸设备优化 ==================== */
+
+@media (hover: none) and (pointer: coarse) {
+  .editor-action-btn,
+  .editor-publish-btn,
+  .achievement-item,
+  .tag-option,
+  .visibility-option {
+    min-height: 44px;
+  }
+
+  .image-remove-btn,
+  .achievement-remove-btn,
+  .tag-remove-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ==================== 动画效果 ==================== */
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-editor-dialog {
+  animation: slideUp 0.3s ease;
+}
+
+.dialog-overlay {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

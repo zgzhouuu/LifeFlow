@@ -1,0 +1,206 @@
+/* ===========================
+   ACHIEVEMENT DISPLAY STYLES
+   =========================== */
+
+.achievement-display {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.achievement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #E0E6ED;
+}
+
+.achievement-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #2C3E50;
+}
+
+.total-points {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.points-label {
+    font-size: 14px;
+    color: #8B4513;
+    font-weight: 600;
+}
+
+.points-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #8B4513;
+}
+
+/* 成就统计卡片 */
+.achievement-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: #F8F9FA;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background: #E9ECEF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #7F8C8D;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2C3E50;
+    margin-bottom: 4px;
+}
+
+.next-goal {
+    font-size: 11px;
+    color: #95A5A6;
+    margin-top: 4px;
+}
+
+/* 徽章展示 */
+.achievement-badges h4 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    color: #2C3E50;
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.badge-item {
+    background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.badge-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: #FFD700;
+}
+
+.badge-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+    animation: badgeFloat 3s ease-in-out infinite;
+}
+
+@keyframes badgeFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.badge-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2C3E50;
+    margin-bottom: 4px;
+}
+
+.badge-points {
+    font-size: 11px;
+    color: #FFA500;
+    font-weight: 600;
+}
+
+.no-badges {
+    text-align: center;
+    padding: 40px 20px;
+    color: #95A5A6;
+    font-size: 14px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .achievement-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .badges-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+    
+    .badge-icon {
+        font-size: 32px;
+    }
+    
+    .achievement-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .achievement-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 成就通知样式 */
+.notification.achievement {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #8B4513;
+    border-left: 4px solid #FF8C00;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.notification.achievement::before {
+    content: '🎉';
+    margin-right: 8px;
+    font-size: 20px;
+}

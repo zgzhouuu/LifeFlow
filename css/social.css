@@ -1,0 +1,871 @@
+/**
+ * Social Page Styles - 社交广场样式
+ * 响应式布局：桌面端三列、平板端两列、移动端单列
+ */
+
+/* ==================== 主容器布局 ==================== */
+
+/* 桌面端：三列布局 (>1200px) */
+.social-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr 320px;
+    gap: 20px;
+    align-items: start;
+}
+
+/* 主题色变量 - 淡蓝色 */
+:root {
+    --theme-primary: #60a5fa;
+    --theme-primary-dark: #3b82f6;
+    --theme-primary-light: #93c5fd;
+    --theme-gradient: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+/* 侧边栏基础样式 */
+.social-sidebar {
+    position: sticky;
+    top: 20px;
+}
+
+.social-main {
+    min-height: 600px;
+}
+
+/* ==================== 侧边栏卡�?==================== */
+
+.sidebar-card {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar-title {
+    color: #2C3E50;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #E0E6ED;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==================== 好友列表 ==================== */
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #F5F7FA;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.friend-item:hover {
+    background: #E8EBF0;
+    transform: translateX(4px);
+}
+
+.friend-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--theme-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.friend-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.friend-name {
+    font-weight: 600;
+    color: #2C3E50;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.friend-status {
+    font-size: 12px;
+    color: #7F8C8D;
+}
+
+/* ==================== 个人资料卡片 ==================== */
+
+.profile-card {
+    text-align: center;
+}
+
+.profile-avatar {
+    margin-bottom: 16px;
+}
+
+.avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--theme-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.profile-info {
+    margin-bottom: 20px;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2C3E50;
+    margin-bottom: 8px;
+}
+
+.profile-bio {
+    font-size: 14px;
+    color: #7F8C8D;
+    line-height: 1.5;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 16px 0;
+    border-top: 1px solid #E0E6ED;
+    border-bottom: 1px solid #E0E6ED;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--theme-primary-dark);
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #7F8C8D;
+}
+
+.view-profile-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: var(--theme-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+.view-profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+}
+
+/* ==================== 热门标签 ==================== */
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-item {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #F5F7FA;
+    color: var(--theme-primary-dark);
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tag-item:hover {
+    background: var(--theme-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ==================== 动态编辑器 ==================== */
+
+.post-editor-card {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.editor-title {
+    color: #2C3E50;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.post-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post-input {
+    width: 100%;
+    min-height: 120px;
+    padding: 16px;
+    border: 2px solid #E0E6ED;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    color: #2C3E50;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.post-input:focus {
+    outline: none;
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+}
+
+.post-input::placeholder {
+    color: #95A5A6;
+}
+
+.editor-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.editor-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.editor-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #F5F7FA;
+    border: 1px solid #E0E6ED;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2C3E50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 44px;
+}
+
+.editor-btn:hover {
+    background: #E8EBF0;
+    border-color: #CBD5E0;
+}
+
+.editor-submit {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.char-count {
+    font-size: 13px;
+    color: #7F8C8D;
+    font-weight: 500;
+}
+
+.publish-btn {
+    padding: 10px 24px;
+    background: var(--theme-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 44px;
+}
+
+.publish-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+}
+
+.publish-btn:active {
+    transform: translateY(0);
+}
+
+/* ==================== 动态流 ==================== */
+
+.posts-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post-card {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.post-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* ==================== 空状�?==================== */
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7F8C8D;
+}
+
+.empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.empty-hint {
+    font-size: 14px;
+    color: #95A5A6;
+}
+
+/* ==================== 移动端底部标签栏 ==================== */
+
+.mobile-tab-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+    z-index: 100;
+}
+
+.tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    background: none;
+    border: none;
+    color: #7F8C8D;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 44px;
+}
+
+.tab-item.active {
+    color: var(--theme-primary-dark);
+}
+
+.tab-icon {
+    font-size: 24px;
+}
+
+.tab-label {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ==================== 平板端布局 (768px - 1200px) ==================== */
+
+@media (max-width: 1200px) {
+    .social-container {
+        grid-template-columns: 1fr 360px;
+        gap: 16px;
+    }
+    
+    /* 隐藏左侧好友列表 */
+    .social-sidebar-left {
+        display: none;
+    }
+    
+    /* 右侧栏保持显�?*/
+    .social-sidebar-right {
+        display: block;
+    }
+}
+
+/* ==================== 移动端布局 (<768px) ==================== */
+
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+        padding-bottom: 80px; /* 为底部标签栏留出空间 */
+    }
+    
+    .top-bar {
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .top-bar-left {
+        flex-wrap: wrap;
+    }
+    
+    .page-title {
+        font-size: 20px;
+    }
+    
+    .back-btn {
+        padding: 6px 16px;
+        font-size: 13px;
+    }
+    
+    .user-info {
+        font-size: 14px;
+    }
+    
+    /* 单列布局 */
+    .social-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    /* 默认隐藏所有侧边栏 */
+    .social-sidebar {
+        display: none;
+        position: static;
+    }
+    
+    /* 根据移动端视图显示对应内�?*/
+    .social-container[data-mobile-view="feed"] .social-main {
+        display: block;
+    }
+    
+    .social-container[data-mobile-view="feed"] .social-sidebar {
+        display: none;
+    }
+    
+    .social-container[data-mobile-view="friends"] .social-sidebar-left {
+        display: block;
+    }
+    
+    .social-container[data-mobile-view="friends"] .social-main,
+    .social-container[data-mobile-view="friends"] .social-sidebar-right {
+        display: none;
+    }
+    
+    .social-container[data-mobile-view="profile"] .social-sidebar-right {
+        display: block;
+    }
+    
+    .social-container[data-mobile-view="profile"] .social-main,
+    .social-container[data-mobile-view="profile"] .social-sidebar-left {
+        display: none;
+    }
+    
+    /* 显示移动端底部标签栏 */
+    .mobile-tab-bar {
+        display: flex;
+    }
+    
+    /* 调整卡片内边�?*/
+    .sidebar-card,
+    .post-editor-card {
+        padding: 20px;
+    }
+    
+    .sidebar-title,
+    .editor-title {
+        font-size: 16px;
+    }
+    
+    /* 调整编辑�?*/
+    .post-input {
+        min-height: 100px;
+        font-size: 14px;
+    }
+    
+    .editor-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .editor-actions {
+        justify-content: space-between;
+    }
+    
+    .editor-btn {
+        flex: 1;
+        justify-content: center;
+        min-width: 0;
+    }
+    
+    .editor-submit {
+        justify-content: space-between;
+    }
+    
+    .publish-btn {
+        flex: 1;
+    }
+    
+    /* 调整个人资料卡片 */
+    .avatar-placeholder {
+        width: 64px;
+        height: 64px;
+        font-size: 32px;
+    }
+    
+    .profile-name {
+        font-size: 18px;
+    }
+    
+    .stat-value {
+        font-size: 20px;
+    }
+    
+    /* 调整好友列表 */
+    .friend-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+    
+    .friend-name {
+        font-size: 13px;
+    }
+    
+    .friend-status {
+        font-size: 11px;
+    }
+}
+
+/* ==================== 小屏幕移动端 (<576px) ==================== */
+
+@media (max-width: 576px) {
+    body {
+        padding: 8px;
+        padding-bottom: 80px;
+    }
+    
+    .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .top-bar-left {
+        justify-content: space-between;
+    }
+    
+    .user-info {
+        text-align: center;
+    }
+    
+    .sidebar-card,
+    .post-editor-card {
+        padding: 16px;
+        border-radius: 12px;
+    }
+    
+    .post-input {
+        min-height: 80px;
+        padding: 12px;
+    }
+    
+    .editor-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .editor-btn span:last-child {
+        display: none; /* 隐藏按钮文字，只显示图标 */
+    }
+    
+    .publish-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .profile-stats {
+        gap: 12px;
+    }
+    
+    .stat-value {
+        font-size: 18px;
+    }
+    
+    .stat-label {
+        font-size: 11px;
+    }
+    
+    .tab-icon {
+        font-size: 20px;
+    }
+    
+    .tab-label {
+        font-size: 11px;
+    }
+}
+
+/* ==================== 触摸设备优化 ==================== */
+
+@media (hover: none) and (pointer: coarse) {
+    /* 确保所有可点击元素至少 44x44px */
+    .editor-btn,
+    .publish-btn,
+    .tab-item,
+    .friend-item,
+    .tag-item {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* 移除悬停效果 */
+    .friend-item:hover,
+    .tag-item:hover,
+    .editor-btn:hover,
+    .post-card:hover {
+        transform: none;
+    }
+    
+    /* 添加点击反馈 */
+    .friend-item:active,
+    .tag-item:active,
+    .editor-btn:active {
+        opacity: 0.7;
+    }
+}
+
+/* ==================== 平滑滚动 ==================== */
+
+.friends-list,
+.posts-feed {
+    scroll-behavior: smooth;
+}
+
+/* 自定义滚动条 */
+.friends-list::-webkit-scrollbar,
+.posts-feed::-webkit-scrollbar {
+    width: 6px;
+}
+
+.friends-list::-webkit-scrollbar-track,
+.posts-feed::-webkit-scrollbar-track {
+    background: #F5F7FA;
+    border-radius: 3px;
+}
+
+.friends-list::-webkit-scrollbar-thumb,
+.posts-feed::-webkit-scrollbar-thumb {
+    background: #CBD5E0;
+    border-radius: 3px;
+}
+
+.friends-list::-webkit-scrollbar-thumb:hover,
+.posts-feed::-webkit-scrollbar-thumb:hover {
+    background: #A0AEC0;
+}
+
+/* ==================== 标签过滤功能 ==================== */
+
+/* 标签搜索�?*/
+.tag-search-box {
+    margin-bottom: 16px;
+}
+
+.tag-search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #E0E6ED;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2C3E50;
+    transition: all 0.3s ease;
+}
+
+.tag-search-input:focus {
+    outline: none;
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+}
+
+.tag-search-input::placeholder {
+    color: #95A5A6;
+}
+
+/* 标签项激活状�?*/
+.tag-item.active {
+    background: #06b6d4;
+    color: white;
+    font-weight: 600;
+}
+
+/* 标签过滤提示�?*/
+.tag-filter-bar {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+    border: 2px solid var(--theme-primary);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filter-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.filter-icon {
+    font-size: 20px;
+}
+
+.filter-text {
+    font-size: 14px;
+    color: #2C3E50;
+}
+
+.filter-text strong {
+    color: var(--theme-primary-dark);
+    font-weight: 700;
+}
+
+.clear-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid var(--theme-primary);
+    border-radius: 8px;
+    color: var(--theme-primary-dark);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 44px;
+}
+
+.clear-filter-btn:hover {
+    background: var(--theme-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.clear-filter-btn:active {
+    transform: translateY(0);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .tag-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 16px;
+        gap: 12px;
+    }
+    
+    .filter-info {
+        justify-content: center;
+    }
+    
+    .filter-text {
+        font-size: 13px;
+    }
+    
+    .clear-filter-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .tag-search-input {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+    
+    .tag-filter-bar {
+        padding: 12px;
+    }
+    
+    .filter-icon {
+        font-size: 18px;
+    }
+    
+    .filter-text {
+        font-size: 12px;
+    }
+    
+    .clear-filter-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}

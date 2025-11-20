@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社交广场 - LifeFlow</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/social.css">
+    <link rel="stylesheet" href="css/postEditor.css">
+    <link rel="stylesheet" href="css/postFeed.css">
+    <link rel="stylesheet" href="css/friendList.css">
+    <link rel="stylesheet" href="css/chatWindow.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .top-bar {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .user-info {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        /* 聊天窗口容器样式 */
+        .chat-window-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            height: 600px;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            animation: slideInUp 0.3s ease;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* 响应式：移动端全屏显示 */
+        @media (max-width: 768px) {
+            .chat-window-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <a href="index.html" class="back-btn">
+                <span>←</span>
+                <span>返回主页</span>
+            </a>
+            <div class="page-title">🌐 社交广场</div>
+        </div>
+        <div class="user-info" id="userInfo">加载中...</div>
+    </div>
+
+    <!-- 主容器 - 响应式三列/两列/单列布局 -->
+    <div class="social-container">
+        <!-- 左侧栏 - 好友列表 (桌面端显示) -->
+        <aside class="social-sidebar social-sidebar-left">
+            <div class="sidebar-card" style="padding: 0; overflow: hidden;">
+                <div id="friendsList" style="height: 100%;"></div>
+            </div>
+        </aside>
+
+        <!-- 中间主内容区 - 动态流 -->
+        <main class="social-main">
+            <!-- 发布动态编辑器 -->
+            <div class="post-editor-card">
+                <h3 class="editor-title">✍️ 发布动态</h3>
+                <div id="postEditor"></div>
+            </div>
+
+            <!-- 标签过滤提示 -->
+            <div class="tag-filter-bar" id="tagFilterBar" style="display: none;">
+                <div class="filter-info">
+                    <span class="filter-icon">🏷️</span>
+                    <span class="filter-text">正在显示标签: <strong id="currentFilterTag"></strong></span>
+                </div>
+                <button class="clear-filter-btn" id="clearFilterBtn">
+                    <span>✕</span>
+                    <span>清除筛选</span>
+                </button>
+            </div>
+
+            <!-- 动态流 -->
+            <div class="posts-feed" id="postsFeed">
+                <div class="empty-state">
+                    <div class="empty-icon">📝</div>
+                    <p>还没有动态</p>
+                    <p class="empty-hint">快去发布第一条动态吧</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- 右侧栏 - 个人资料卡片 (桌面端显示) -->
+        <aside class="social-sidebar social-sidebar-right">
+            <div class="sidebar-card">
+                <h2 class="sidebar-title">👤 个人资料</h2>
+                <div class="profile-card" id="profileCard">
+                    <div class="profile-avatar">
+                        <div class="avatar-placeholder">👤</div>
+                    </div>
+                    <div class="profile-info">
+                        <h3 class="profile-name" id="profileName">用户名</h3>
+                        <p class="profile-bio" id="profileBio">这个人很懒，什么都没写</p>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="postsCount">0</div>
+                            <div class="stat-label">动态</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="friendsCount">0</div>
+                            <div class="stat-label">好友</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="likesCount">0</div>
+                            <div class="stat-label">获赞</div>
+                        </div>
+                    </div>
+                    <a href="profile.html" class="view-profile-btn">查看完整资料</a>
+                </div>
+            </div>
+
+            <!-- 热门标签 -->
+            <div class="sidebar-card">
+                <h2 class="sidebar-title">#️⃣ 热门标签</h2>
+                <div class="tag-search-box">
+                    <input type="text" id="tagSearchInput" placeholder="搜索标签..." class="tag-search-input">
+                </div>
+                <div class="tags-list" id="tagsList">
+                    <span class="tag-item" data-tag="#运动">#运动</span>
+                    <span class="tag-item" data-tag="#学习">#学习</span>
+                    <span class="tag-item" data-tag="#生活">#生活</span>
+                    <span class="tag-item" data-tag="#健康">#健康</span>
+                    <span class="tag-item" data-tag="#成就">#成就</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 移动端底部标签栏 -->
+    <nav class="mobile-tab-bar">
+        <button class="tab-item active" data-tab="feed">
+            <span class="tab-icon">📝</span>
+            <span class="tab-label">动态</span>
+        </button>
+        <button class="tab-item" data-tab="friends">
+            <span class="tab-icon">👥</span>
+            <span class="tab-label">好友</span>
+        </button>
+        <button class="tab-item" data-tab="profile">
+            <span class="tab-icon">👤</span>
+            <span class="tab-label">我的</span>
+        </button>
+    </nav>
+
+    <!-- 加载依赖脚本 -->
+    <script src="js/modules/storageManager.js"></script>
+    <script src="js/modules/achievementManager.js"></script>
+    <script src="js/utils/imageCompressor.js"></script>
+    <script src="js/utils/dateFormatter.js"></script>
+    <script src="js/services/profileService.js"></script>
+    <script src="js/services/notificationService.js"></script>
+    <script src="js/services/friendService.js"></script>
+    <script src="js/services/socialService.js"></script>
+    <script src="js/services/chatService.js"></script>
+    <script src="js/components/friendList.js"></script>
+    <script src="js/components/chatWindow.js"></script>
+    <script src="js/components/postEditor.js"></script>
+    <script src="js/components/postFeed.js"></script>
+
+    <script>
+        // 初始化用户信息
+        const currentUser = localStorage.getItem('lifeflow_current_user');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        } else {
+            // 显示昵称而不是用户名
+            const tempProfile = JSON.parse(localStorage.getItem(`lifeflow_${currentUser}_profile`)) || {};
+            const displayName = tempProfile.nickname || currentUser;
+            document.getElementById('userInfo').textContent = displayName;
+        }
+
+        // 初始化服务
+        const storageManager = new StorageManager();
+        const profileService = new ProfileService(storageManager);
+        const notificationService = new NotificationService(storageManager);
+        const friendService = new FriendService(storageManager);
+        const socialService = new SocialService(storageManager);
+        const chatService = new ChatService(storageManager);
+        
+        // 将服务挂载到全局，供PostFeed使用
+        window.storageManager = storageManager;
+        window.profileService = profileService;
+        window.notificationService = notificationService;
+        window.friendService = friendService;
+        window.socialService = socialService;
+        window.chatService = chatService;
+
+        // 聊天窗口管理
+        const chatWindows = new Map();
+        
+        /**
+         * 打开聊天窗口
+         */
+        function openChatWindow(friendId) {
+            // 如果聊天窗口已存在，聚焦它
+            if (chatWindows.has(friendId)) {
+                const existingWindow = chatWindows.get(friendId);
+                existingWindow.container.style.display = 'block';
+                existingWindow.scrollToBottom();
+                return;
+            }
+            
+            // 创建聊天窗口容器
+            const chatWindowDiv = document.createElement('div');
+            chatWindowDiv.className = 'chat-window-container';
+            chatWindowDiv.id = `chat-window-${friendId}`;
+            document.body.appendChild(chatWindowDiv);
+            
+            try {
+                const chatWindow = new ChatWindow(`chat-window-${friendId}`, {
+                    currentUserId: currentUser,
+                    friendId: friendId,
+                    chatService: chatService,
+                    profileService: profileService,
+                    onClose: () => {
+                        chatWindows.delete(friendId);
+                        chatWindowDiv.remove();
+                    }
+                });
+                
+                chatWindows.set(friendId, chatWindow);
+                console.log(`已打开与 ${friendId} 的聊天窗口`);
+            } catch (error) {
+                console.error('创建聊天窗口失败:', error);
+                showNotification('打开聊天窗口失败: ' + error.message, 'error');
+                chatWindowDiv.remove();
+            }
+        }
+
+        // 初始化 FriendList 组件
+        let friendList;
+        try {
+            friendList = new FriendList('friendsList', {
+                currentUserId: currentUser,
+                friendService: friendService,
+                profileService: profileService,
+                showSearch: true,
+                showRequests: true,
+                onFriendClick: (friendId) => {
+                    console.log('Open chat with:', friendId);
+                    openChatWindow(friendId);
+                },
+                onFriendAdded: (friendId) => {
+                    console.log('Friend added:', friendId);
+                    // 刷新动态流以显示新好友的动态
+                    if (postFeed) {
+                        const friendIds = friendService.getFriends(currentUser);
+                        postFeed.updateOptions({ friendIds });
+                    }
+                    // 更新好友统计
+                    updateFriendStats();
+                },
+                onFriendRemoved: (friendId) => {
+                    console.log('Friend removed:', friendId);
+                    // 刷新动态流
+                    if (postFeed) {
+                        const friendIds = friendService.getFriends(currentUser);
+                        postFeed.updateOptions({ friendIds });
+                    }
+                    // 更新好友统计
+                    updateFriendStats();
+                }
+            });
+        } catch (error) {
+            console.error('初始化好友列表失败:', error);
+        }
+
+        // 初始化 PostFeed 组件
+        let postFeed;
+        try {
+            const friendIds = friendService.getFriends(currentUser);
+            const blockedUserIds = friendService.getBlocklist(currentUser);
+            
+            postFeed = new PostFeed('postsFeed', {
+                currentUserId: currentUser,
+                friendIds: friendIds,
+                blockedUserIds: blockedUserIds,
+                pageSize: 20,
+                enableVirtualScroll: true,
+                enablePullRefresh: true,
+                onLike: (postId, isLiked) => {
+                    console.log(`Post ${postId} ${isLiked ? 'liked' : 'unliked'}`);
+                },
+                onComment: (postId, content) => {
+                    try {
+                        // 添加评论
+                        const comment = socialService.addComment(postId, currentUser, content);
+                        console.log('评论添加成功:', comment);
+                        showNotification('评论成功', 'success');
+                        // PostFeed会自动监听comment:created事件并刷新
+                    } catch (error) {
+                        console.error('评论失败:', error);
+                        showNotification('评论失败: ' + error.message, 'error');
+                    }
+                },
+                onDelete: (postId) => {
+                    showNotification('动态已删除', 'success');
+                },
+                // 举报功能已移除
+                onImageClick: (postId, index) => {
+                    console.log(`View image ${index} of post ${postId}`);
+                    // TODO: 打开图片查看器
+                    showNotification('图片查看器即将推出', 'info');
+                },
+                onTagClick: (tag) => {
+                    // 应用标签过滤
+                    applyTagFilter(tag);
+                }
+            });
+        } catch (error) {
+            console.error('初始化动态流失败:', error);
+        }
+
+        // 更新好友统计
+        function updateFriendStats() {
+            const stats = friendService.getFriendStats(currentUser);
+            const friendsCountEl = document.getElementById('friendsCount');
+            if (friendsCountEl) {
+                friendsCountEl.textContent = stats.friendCount;
+            }
+        }
+        
+        // 更新个人资料统计
+        function updateProfileStats() {
+            // 更新动态数
+            const posts = socialService.getUserPosts(currentUser);
+            const postsCountEl = document.getElementById('postsCount');
+            if (postsCountEl) {
+                postsCountEl.textContent = posts.length;
+            }
+            
+            // 更新获赞数
+            let totalLikes = 0;
+            posts.forEach(post => {
+                totalLikes += post.likes.length;
+            });
+            const likesCountEl = document.getElementById('likesCount');
+            if (likesCountEl) {
+                likesCountEl.textContent = totalLikes;
+            }
+            
+            // 更新用户资料
+            const profile = profileService.getProfile(currentUser);
+            if (profile) {
+                const profileNameEl = document.getElementById('profileName');
+                const profileBioEl = document.getElementById('profileBio');
+                const avatarContainer = document.querySelector('.profile-avatar');
+                
+                if (profileNameEl) {
+                    profileNameEl.textContent = profile.nickname || currentUser;
+                }
+                
+                if (profileBioEl) {
+                    profileBioEl.textContent = profile.bio || '这个人很懒，什么都没写';
+                }
+                
+                // 更新头像
+                if (avatarContainer) {
+                    if (profile.avatar) {
+                        avatarContainer.innerHTML = `<img src="${profile.avatar}" alt="头像" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">`;
+                    } else {
+                        avatarContainer.innerHTML = '<div class="avatar-placeholder">👤</div>';
+                    }
+                }
+            }
+        }
+
+        // 初始化统计
+        updateFriendStats();
+        updateProfileStats();
+
+        // 初始化 PostEditor 组件
+        let postEditor;
+        try {
+            console.log('开始初始化 PostEditor...');
+            console.log('PostEditor 类型:', typeof PostEditor);
+            
+            postEditor = new PostEditor('postEditor', {
+                maxLength: 500,
+                maxImages: 9,
+                maxImageSize: 5 * 1024 * 1024,
+                onPublish: async (postData) => {
+                    try {
+                        console.log('发布动态:', postData);
+                        // 创建动态
+                        const post = socialService.createPost(currentUser, postData);
+                        console.log('动态创建成功:', post);
+                        
+                        // 动态流会自动监听post:created事件并刷新
+                        
+                        // 更新统计
+                        updateProfileStats();
+                        
+                        // 显示成功消息
+                        showNotification('动态发布成功！', 'success');
+                    } catch (error) {
+                        console.error('发布动态失败:', error);
+                        showNotification('发布失败: ' + error.message, 'error');
+                        throw error;
+                    }
+                }
+            });
+            console.log('PostEditor 初始化成功');
+        } catch (error) {
+            console.error('初始化编辑器失败:', error);
+            console.error('错误详情:', error.message, error.stack);
+            alert('编辑器初始化失败: ' + error.message);
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ==================== 标签过滤功能 ====================
+        
+        let currentFilterTag = null;
+        const tagFilterBar = document.getElementById('tagFilterBar');
+        const currentFilterTagEl = document.getElementById('currentFilterTag');
+        const clearFilterBtn = document.getElementById('clearFilterBtn');
+        const tagSearchInput = document.getElementById('tagSearchInput');
+        const tagsList = document.getElementById('tagsList');
+        
+        /**
+         * 应用标签过滤
+         * @param {string} tag - 标签名称
+         */
+        function applyTagFilter(tag) {
+            if (!tag) return;
+            
+            // 移除 # 前缀（如果有）
+            const cleanTag = tag.startsWith('#') ? tag : `#${tag}`;
+            
+            currentFilterTag = cleanTag;
+            
+            // 更新UI
+            tagFilterBar.style.display = 'flex';
+            currentFilterTagEl.textContent = cleanTag;
+            
+            // 更新标签列表中的激活状态
+            document.querySelectorAll('.tag-item').forEach(item => {
+                if (item.dataset.tag === cleanTag || item.textContent === cleanTag) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // 更新PostFeed过滤
+            if (postFeed) {
+                postFeed.updateOptions({ filterTag: cleanTag });
+            }
+            
+            // 滚动到动态流顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        /**
+         * 清除标签过滤
+         */
+        function clearTagFilter() {
+            currentFilterTag = null;
+            
+            // 更新UI
+            tagFilterBar.style.display = 'none';
+            currentFilterTagEl.textContent = '';
+            
+            // 移除所有标签的激活状态
+            document.querySelectorAll('.tag-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 清空搜索框
+            tagSearchInput.value = '';
+            
+            // 更新PostFeed过滤
+            if (postFeed) {
+                postFeed.clearFilter();
+            }
+        }
+        
+        /**
+         * 搜索标签
+         * @param {string} query - 搜索关键词
+         */
+        function searchTags(query) {
+            const cleanQuery = query.trim().toLowerCase();
+            
+            if (!cleanQuery) {
+                // 如果搜索框为空，显示所有标签
+                document.querySelectorAll('.tag-item').forEach(item => {
+                    item.style.display = 'inline-block';
+                });
+                return;
+            }
+            
+            // 过滤标签
+            document.querySelectorAll('.tag-item').forEach(item => {
+                const tagText = item.textContent.toLowerCase();
+                if (tagText.includes(cleanQuery)) {
+                    item.style.display = 'inline-block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        /**
+         * 从所有动态中提取热门标签
+         */
+        function updateHotTags() {
+            const allPosts = socialService.getAllPosts();
+            const tagCounts = {};
+            
+            // 统计标签出现次数
+            allPosts.forEach(post => {
+                if (post.tags && post.tags.length > 0) {
+                    post.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+                }
+            });
+            
+            // 按出现次数排序
+            const sortedTags = Object.entries(tagCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10) // 只显示前10个
+                .map(([tag]) => tag);
+            
+            // 更新标签列表
+            if (sortedTags.length > 0) {
+                tagsList.innerHTML = sortedTags.map(tag => 
+                    `<span class="tag-item" data-tag="${tag}">${tag}</span>`
+                ).join('');
+            } else {
+                // 如果没有标签，显示默认标签
+                tagsList.innerHTML = `
+                    <span class="tag-item" data-tag="#运动">#运动</span>
+                    <span class="tag-item" data-tag="#学习">#学习</span>
+                    <span class="tag-item" data-tag="#生活">#生活</span>
+                    <span class="tag-item" data-tag="#健康">#健康</span>
+                    <span class="tag-item" data-tag="#成就">#成就</span>
+                `;
+            }
+            
+            // 重新绑定点击事件
+            attachTagClickEvents();
+        }
+        
+        /**
+         * 绑定标签点击事件
+         */
+        function attachTagClickEvents() {
+            document.querySelectorAll('.tag-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const tag = item.dataset.tag || item.textContent;
+                    applyTagFilter(tag);
+                });
+            });
+        }
+        
+        // 清除过滤按钮点击事件
+        clearFilterBtn.addEventListener('click', clearTagFilter);
+        
+        // 标签搜索输入事件（防抖）
+        let searchTimeout;
+        tagSearchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchTags(e.target.value);
+            }, 300);
+        });
+        
+        // 初始化标签点击事件
+        attachTagClickEvents();
+        
+        // 监听动态创建事件，更新热门标签和统计
+        window.addEventListener('post:created', () => {
+            updateHotTags();
+            updateProfileStats();
+        });
+        
+        // 监听动态删除事件，更新统计
+        window.addEventListener('post:deleted', () => {
+            updateProfileStats();
+        });
+        
+        // 监听资料更新事件
+        window.addEventListener('profile:updated', (e) => {
+            console.log('Profile updated event received:', e.detail);
+            updateProfileStats();
+        });
+        
+        // 初始化时更新热门标签
+        updateHotTags();
+        
+        // ==================== 移动端标签栏切换 ====================
+        
+        const tabItems = document.querySelectorAll('.tab-item');
+        const socialContainer = document.querySelector('.social-container');
+        
+        tabItems.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabItems.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const tabName = tab.dataset.tab;
+                socialContainer.setAttribute('data-mobile-view', tabName);
+            });
+        });
+    </script>
+</body>
+</html>

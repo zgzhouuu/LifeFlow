@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人资料 - LifeFlow</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/healthPanel.css">
+    <link rel="stylesheet" href="css/aiAnalysisPanel.css">
+    <link rel="stylesheet" href="css/badgeWall.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-bar">
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <span>←</span>
+            <span>返回主页</span>
+        </button>
+        <h1 class="page-title">个人资料</h1>
+        <div class="top-bar-spacer"></div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="profile-container">
+        <!-- 个人资料卡片 -->
+        <div id="profileCard"></div>
+        
+        <!-- 健康数据面板 -->
+        <div id="healthPanel"></div>
+        
+        <!-- 勋章墙 -->
+        <div id="badgeWall"></div>
+        
+        <!-- AI分析面板 -->
+        <div id="aiAnalysisPanel"></div>
+    </div>
+
+    <!-- Simple Toast Notification -->
+    <script>
+        // Simple toast notification system
+        window.toastNotification = {
+            show: function(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 16px 24px;
+                    background: ${type === 'success' ? '#27AE60' : type === 'error' ? '#E74C3C' : '#3498DB'};
+                    color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease;
+                    font-size: 14px;
+                    max-width: 300px;
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        };
+        
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <!-- 数据模型 -->
+    <script src="js/models/UserProfile.js"></script>
+    <script src="js/models/HealthData.js"></script>
+    
+    <!-- 工具类 -->
+    <script src="js/utils/imageCompressor.js"></script>
+    
+    <!-- 服务层 -->
+    <script src="js/modules/storageManager.js"></script>
+    <script src="js/modules/achievementManager.js"></script>
+    <script src="js/services/profileService.js"></script>
+    <script src="js/services/healthServiceStandalone.js"></script>
+    <script src="js/services/deepseekService.js"></script>
+    <script src="js/services/aiAnalysisService.js"></script>
+    
+    <!-- 组件 -->
+    <script src="js/components/profileCard.js"></script>
+    <script src="js/components/healthPanel.js"></script>
+    <script src="js/components/badgeWall.js"></script>
+    <script src="js/components/aiAnalysisPanel.js"></script>
+    
+    <!-- 页面初始化 -->
+    <script>
+        // 检查登录状态
+        const currentUser = localStorage.getItem('lifeflow_current_user');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            const storageManager = new StorageManager();
+            const profileService = new ProfileService(storageManager);
+            const healthService = new HealthService(storageManager);
+            const achievementManager = new AchievementManager();
+            
+            const profileCard = new ProfileCard('profileCard', profileService, currentUser);
+            profileCard.render();
+            
+            const healthPanel = new HealthPanel('healthPanel', healthService, currentUser);
+            healthPanel.render();
+            
+            const badgeWall = new BadgeWall('badgeWall', achievementManager);
+            badgeWall.render();
+        });
+    </script>
+</body>
+</html>

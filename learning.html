@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习助手 - LifeFlow</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/interactions.css">
+    <link rel="stylesheet" href="css/statistics.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/dailyCheckIn.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/uxEnhancements.css">
+    <link rel="stylesheet" href="css/aiAssistant.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            transition: opacity 200ms ease;
+        }
+        
+        body.page-transitioning {
+            pointer-events: none;
+        }
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .page-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .nav-bar {
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .nav-bar a {
+            color: #2C3E50;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .nav-bar a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .nav-bar a.active {
+            background: #2196F3;
+            color: white;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 600px 1fr;
+            gap: 20px;
+            align-items: stretch;
+            margin-bottom: 20px;
+        }
+        
+        /* 打卡面板容器 - 固定高度确保对齐 */
+        #dailyCheckInContainer {
+            height: 700px;
+        }
+        
+        /* 右侧卡片容器 - 匹配左侧高度 */
+        .content-grid > div:last-child {
+            height: 700px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 右侧卡片 - 固定高度，内部滚动 */
+        .content-grid > div:last-child > .card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            margin-bottom: 0;
+        }
+        
+        /* 热力图容器 - 减小高度 */
+        .heatmap {
+            flex-shrink: 0;
+            max-height: 180px;
+            overflow: hidden;
+            padding: 10px 0;
+        }
+        
+        /* 学习记录列表容器 - 增加高度，允许滚动 */
+        .learning-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        /* 自定义滚动条样式 */
+        .learning-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .learning-list::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+        
+        .learning-list::-webkit-scrollbar-thumb {
+            background: rgba(33, 150, 243, 0.5);
+            border-radius: 4px;
+        }
+        
+        .learning-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(33, 150, 243, 0.7);
+        }
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .card:last-child {
+            margin-bottom: 0;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #2C3E50;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #E0E6ED;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #1976D2;
+        }
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(7, 40px);
+            grid-template-rows: repeat(4, 40px);
+            gap: 6px;
+            margin: 15px auto;
+            width: fit-content;
+            padding: 10px;
+            justify-content: center;
+        }
+        .heatmap-day {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            background: #EBEDF0;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .heatmap-day:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .heatmap-day.level-1 { background: #9ECBFF; } /* 1-29分钟 - 浅蓝色 */
+        .heatmap-day.level-2 { background: #539BF5; } /* 30-59分钟 - 中蓝色 */
+        .heatmap-day.level-3 { background: #2188FF; } /* 60-89分钟 - 深蓝色 */
+        .heatmap-day.level-4 { background: #0969DA; } /* 90分钟以上 - 最深蓝色 */
+        .learning-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        
+
+        .learning-item {
+            background: #F5F7FA;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #2196F3;
+            transition: background 0.3s ease;
+        }
+        
+        .learning-item:hover {
+            background: #E3F2FD;
+        }
+        .learning-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .learning-item-date {
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        .learning-item-delete {
+            background: #E74C3C;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .stats {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: #F5F7FA;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 150px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #7F8C8D;
+            white-space: nowrap;
+        }
+        
+        /* Trend Chart Container */
+        .trend-chart-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .chart-toggle-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 2px solid #E0E6ED;
+            background: white;
+            color: #7F8C8D;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .toggle-btn:hover {
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+        
+        .toggle-btn.active {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+        
+        .chart-canvas-wrapper {
+            position: relative;
+            height: 300px;
+            margin-bottom: 16px;
+        }
+        
+        .chart-stats-container {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 16px;
+            border-top: 1px solid #E0E6ED;
+        }
+        
+        /* 统计数据容器 - 水平布局 */
+        .chart-statistics {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            gap: 20px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #F8F9FA;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            background: #E9ECEF;
+            transform: translateY(-2px);
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 12px;
+            color: #7F8C8D;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2196F3;
+        }
+        
+        /* 兼容旧样式 */
+        .chart-stat-item {
+            text-align: center;
+        }
+        
+        .chart-stat-label {
+            font-size: 12px;
+            color: #7F8C8D;
+            margin-bottom: 4px;
+        }
+        
+        .chart-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2C3E50;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="page-header">
+            <h1>📚 学习助手</h1>
+            <p>记录您的学习时光，追踪学习进度</p>
+        </div>
+
+        <div class="nav-bar">
+            <a href="index.html">首页</a>
+            <a href="life.html">生活管家</a>
+            <a href="exercise.html">运动伴侣</a>
+            <a href="learning.html" class="active">学习助手</a>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div id="learningStatsCards"></div>
+        
+        <div class="content-grid">
+            <!-- 左侧：今日打卡面�?-->
+            <div id="dailyCheckInContainer"></div>
+
+            <!-- 右侧：热力图和历史记�?-->
+            <div>
+                <div class="card">
+                    <h2>📊 学习热力图</h2>
+                    <p style="color: #7F8C8D; font-size: 14px;">最近28天的学习情况</p>
+                    <div class="heatmap" id="heatmap">
+                        <!-- 热力图将在这里生�?-->
+                    </div>
+                    
+                    <h2 style="margin-top: 30px;">📋 学习记录</h2>
+                    <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center;">
+                        <input type="date" id="filterDate" style="padding: 8px; border: 1px solid #E0E6ED; border-radius: 8px; font-size: 14px;" />
+                        <button onclick="filterByDate()" style="background: #2196F3; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">查询</button>
+                        <button onclick="showTodayRecords()" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">显示今日</button>
+                        <button onclick="showAllRecords()" style="background: #95a5a6; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">显示全部</button>
+                    </div>
+                    <div class="learning-list" id="learningList">
+                        <!-- 学习记录列表 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trend Chart Section -->
+        <div class="trend-chart-container" id="learningTrendChartContainer">
+            <div class="chart-header">
+                <h3 class="chart-title" style="color: #2196F3;">📈 学习趋势</h3>
+                <div class="chart-toggle-buttons">
+                    <button class="toggle-btn active" data-view="weekly">周视图</button>
+                    <button class="toggle-btn" data-view="monthly">月视图</button>
+                </div>
+            </div>
+            <div class="chart-canvas-wrapper">
+                <canvas id="learningTrendChart"></canvas>
+            </div>
+            <div id="learningTrendChart-stats" class="chart-stats-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状�?
+        if (!localStorage.getItem('lifeflow_current_user')) {
+            window.location.href = 'login.html';
+        }
+
+        let learnings = [];
+        let filteredLearnings = null; // null表示显示全部，否则显示过滤后�?
+        let currentFilterDate = null; // 当前筛选的日期
+
+        // 设置默认日期为今�?
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('filterDate').valueAsDate = new Date();
+        currentFilterDate = today;
+        
+        // 加载今日已完成的活动作为历史记录
+        function loadLearningHistory() {
+            const storageManager = new StorageManager();
+            const allActivities = storageManager.loadActivities('learning');
+            
+            // 只显示已完成的活�?
+            learnings = allActivities
+                .filter(a => a.completed)
+                .map(a => ({
+                    date: a.date,
+                    subject: a.name,
+                    name: a.name,
+                    duration: a.duration,
+                    notes: a.notes,
+                    content: a.notes,
+                    completedAt: a.completedAt
+                }))
+                .sort((a, b) => {
+                    // 按日期降序，再按完成时间降序
+                    if (a.date !== b.date) {
+                        return b.date.localeCompare(a.date);
+                    }
+                    return (b.completedAt || '').localeCompare(a.completedAt || '');
+                });
+            
+            // 默认只显示今天的记录
+            filteredLearnings = learnings.filter(learn => learn.date === today);
+        }
+
+        function filterByDate() {
+            const filterDate = document.getElementById('filterDate').value;
+            if (!filterDate) {
+                alert('请选择日期');
+                return;
+            }
+            currentFilterDate = filterDate;
+            filteredLearnings = learnings.filter(learn => learn.date === filterDate);
+            renderLearningList();
+            renderHistoryProgress();
+        }
+        
+        function showTodayRecords() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('filterDate').valueAsDate = new Date();
+            currentFilterDate = today;
+            filteredLearnings = learnings.filter(learn => learn.date === today);
+            renderLearningList();
+            renderHistoryProgress();
+        }
+        
+        function showAllRecords() {
+            currentFilterDate = null;
+            filteredLearnings = null;
+            renderLearningList();
+            hideHistoryProgress();
+        }
+        
+        function renderLearningList() {
+            const list = document.getElementById('learningList');
+            const displayLearnings = filteredLearnings !== null ? filteredLearnings : learnings;
+            
+            if (displayLearnings.length === 0) {
+                const filterDate = document.getElementById('filterDate').value;
+                const isFiltered = filteredLearnings !== null;
+                const message = isFiltered 
+                    ? `📅 ${filterDate} 还没有学习记录，快来学习吧！📚` 
+                    : '暂无学习记录';
+                list.innerHTML = `<p style="text-align: center; color: #7F8C8D; padding: 20px;">${message}</p>`;
+                return;
+            }
+
+            list.innerHTML = displayLearnings.slice(0, 20).map((learn) => {
+                const timeStr = learn.completedAt ? new Date(learn.completedAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) : '';
+                return `
+                    <div class="learning-item">
+                        <div class="learning-item-header">
+                            <span class="learning-item-date">${learn.date} ${timeStr ? `${timeStr}` : ''} - ${learn.subject || learn.name || '学习'}</span>
+                        </div>
+                        <div style="color: #7F8C8D; font-size: 14px;">
+                            时长: ${learn.duration}分钟
+                            ${learn.content ? `<br>内容: ${learn.content}` : ''}
+                            ${learn.note || learn.notes ? `<br>💭 心得: ${learn.note || learn.notes}` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderHistoryProgress() {
+            if (!currentFilterDate) return;
+            
+            const storageManager = new StorageManager();
+            const dateActivities = storageManager.loadActivitiesByDate('learning', currentFilterDate);
+            const dailyGoal = storageManager.loadDailyGoal('learning');
+            
+            const dailyProgress = new DailyProgress(currentFilterDate, dateActivities, dailyGoal);
+            const progress = dailyProgress.getProgress();
+            
+            // 在历史记录上方显示该日期的进�?
+            const list = document.getElementById('learningList');
+            const progressHTML = `
+                <div style="background: #F5F7FA; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid ${progress.achieved ? '#FFD700' : '#2196F3'};">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: 600; color: #2C3E50;">📅 ${currentFilterDate} 进度</span>
+                        <span style="font-weight: 600; color: #2196F3;">${progress.completed} / ${progress.goal} 分钟</span>
+                    </div>
+                    <div style="background: #E0E6ED; height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="width: ${progress.percentage}%; height: 100%; background: ${progress.achieved ? 'linear-gradient(90deg, #FFD700, #FFA500)' : 'linear-gradient(90deg, #2196F3, #64B5F6)'}; transition: width 0.3s ease;"></div>
+                    </div>
+                    <div style="margin-top: 8px; font-size: 14px; color: #7F8C8D;">
+                        ${progress.achieved ? '🎉 目标已达成！' : `还差 ${progress.goal - progress.completed} 分钟达成目标`}
+                    </div>
+                </div>
+            `;
+            
+            list.insertAdjacentHTML('afterbegin', progressHTML);
+        }
+        
+        function hideHistoryProgress() {
+            // 移除进度显示（如果存在）
+            const list = document.getElementById('learningList');
+            const progressDiv = list.querySelector('div[style*="border-left"]');
+            if (progressDiv && progressDiv.textContent.includes('进度')) {
+                progressDiv.remove();
+            }
+        }
+
+        function renderHeatmap() {
+            const heatmap = document.getElementById('heatmap');
+            if (!heatmap) return;
+            
+            heatmap.innerHTML = '';
+
+            // 生成最近28天
+            const today = new Date();
+            
+            for (let i = 27; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                // 计算当天的学习时长
+                const dayLearnings = learnings.filter(learn => learn.date === dateStr);
+                const totalDuration = dayLearnings.reduce((sum, learn) => sum + (learn.duration || 0), 0);
+                
+                // 根据时长设置等级
+                let level = 0;
+                if (totalDuration > 0) level = 1;
+                if (totalDuration >= 30) level = 2;
+                if (totalDuration >= 60) level = 3;
+                if (totalDuration >= 90) level = 4;
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = `heatmap-day${level > 0 ? ' level-' + level : ''}`;
+                dayElement.title = `${dateStr}\n学习时长: ${totalDuration}分钟`;
+                dayElement.style.minHeight = '20px'; // 确保最小高度
+                heatmap.appendChild(dayElement);
+            }
+            
+            console.log(`热力图已渲染: 28天, 总活动数: ${learnings.length}`);
+        }
+
+        function renderStats() {
+            // 计算总时�?
+            const totalMinutes = learnings.reduce((sum, learn) => sum + learn.duration, 0);
+            const totalHours = (totalMinutes / 60).toFixed(1);
+            
+            // 计算学习天数
+            const uniqueDates = new Set(learnings.map(learn => learn.date));
+            const totalDays = uniqueDates.size;
+            
+            // 计算日均时长
+            const avgHours = totalDays > 0 ? (totalMinutes / 60 / totalDays).toFixed(1) : 0;
+            
+            document.getElementById('totalHours').textContent = totalHours;
+            document.getElementById('totalDays').textContent = totalDays;
+            document.getElementById('avgHours').textContent = avgHours;
+        }
+    </script>
+    
+    <!-- 基础模型和工具 - 必须最先加载 -->
+    <script src="js/models/Activity.js"></script>
+    <script src="js/models/DailyProgress.js"></script>
+    <script src="js/modules/storageManager.js"></script>
+    <script src="js/modules/achievementManager.js"></script>
+    
+    <!-- 工具函数 -->
+    <script src="js/utils/chartDataCalculator.js"></script>
+    <script src="js/utils/chartConfig.js"></script>
+    <script src="js/utils/dataMigration.js"></script>
+    <script src="js/utils/performanceUtils.js"></script>
+    <script src="js/utils/uxEnhancements.js"></script>
+    
+    <!-- 组件 -->
+    <script src="js/components/activityEditor.js"></script>
+    <script src="js/components/dailyCheckInPanel.js"></script>
+    <script src="js/components/statisticsCards.js"></script>
+    <script src="js/components/trendChart.js"></script>
+    
+    <!-- AI助手 -->
+    <script src="js/services/deepseekService.js"></script>
+    <script src="js/components/aiAssistant.js"></script>
+    <script>
+        // 初始化AI助手
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AIAssistant !== 'undefined') {
+                aiAssistant = new AIAssistant();
+                window.aiAssistant = aiAssistant;
+            }
+        });
+    </script>
+    
+    <!-- 页面过渡脚本 -->
+    <script src="js/utils/pageTransition.js"></script>
+    
+    <script>
+        let storageManager_learning;
+        let learningStatsCards;
+        let learningTrendChart;
+        let dailyCheckInPanel_learning;
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('=== 学习页面初始化开始 ===');
+            
+            // 检查必要的依赖
+            const dependencies = {
+                'Chart.js': typeof Chart !== 'undefined',
+                'Activity': typeof Activity !== 'undefined',
+                'DailyProgress': typeof DailyProgress !== 'undefined',
+                'StorageManager': typeof StorageManager !== 'undefined',
+                'chartDataCalculator': typeof window.chartDataCalculator !== 'undefined',
+                'ChartConfig': typeof ChartConfig !== 'undefined',
+                'ActivityEditor': typeof ActivityEditor !== 'undefined',
+                'DailyCheckInPanel': typeof DailyCheckInPanel !== 'undefined',
+                'TrendChart': typeof TrendChart !== 'undefined'
+            };
+            
+            console.log('依赖检查:');
+            Object.keys(dependencies).forEach(key => {
+                console.log(`  ${key}: ${dependencies[key] ? '✓' : '✗'}`);
+            });
+            
+            // 如果有依赖缺失，显示错误但继续尝试初始化
+            const missingDeps = Object.keys(dependencies).filter(key => !dependencies[key]);
+            if (missingDeps.length > 0) {
+                console.error('⚠️ 缺少依赖:', missingDeps.join(', '));
+                console.log('尝试继续初始化...');
+                // 不要立即返回，给一些时间让脚本加载
+            }
+            
+            // Execute data migration if needed
+            try {
+                console.log('执行数据迁移...');
+                executeMigration();
+            } catch (error) {
+                console.error('数据迁移错误:', error);
+            }
+            
+            // Initialize storage manager
+            try {
+                console.log('初始化StorageManager...');
+                storageManager_learning = new StorageManager();
+                console.log('✓ StorageManager初始化成功');
+            } catch (error) {
+                console.error('✗ StorageManager初始化失败:', error);
+                return;
+            }
+            
+            // Initialize statistics cards
+            try {
+                console.log('初始化StatisticsCards...');
+                learningStatsCards = new StatisticsCards('learningStatsCards', 'learning', storageManager_learning);
+                learningStatsCards.init();
+                console.log('✓ StatisticsCards初始化成功');
+            } catch (error) {
+                console.error('✗ StatisticsCards初始化失败:', error);
+            }
+            
+            // Initialize daily check-in panel FIRST (before trend chart)
+            try {
+                console.log('初始化DailyCheckInPanel...');
+                initDailyCheckInPanel();
+                console.log('✓ DailyCheckInPanel初始化成功');
+            } catch (error) {
+                console.error('✗ DailyCheckInPanel初始化失败:', error);
+            }
+            
+            // Initialize trend chart AFTER ensuring canvas element exists
+            // Use requestAnimationFrame to ensure DOM is fully rendered
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    try {
+                        console.log('初始化TrendChart...');
+                        
+                        // 验证canvas元素存在
+                        const canvas = document.getElementById('learningTrendChart');
+                        if (!canvas) {
+                            console.error('✗ Canvas元素未找到: learningTrendChart');
+                            return;
+                        }
+                        console.log('✓ Canvas元素已找到');
+                        
+                        initLearningTrendChart();
+                        console.log('✓ TrendChart初始化成功');
+                    } catch (error) {
+                        console.error('✗ TrendChart初始化失败:', error);
+                        console.error('错误详情:', error.stack);
+                    }
+                }, 500);
+            });
+            
+            console.log('=== 学习页面初始化完成 ===');
+        });
+        
+        function initDailyCheckInPanel() {
+            console.log('Initializing DailyCheckInPanel for learning...');
+            dailyCheckInPanel_learning = new DailyCheckInPanel('dailyCheckInContainer', 'learning');
+            dailyCheckInPanel_learning.init();
+            console.log('DailyCheckInPanel init() called');
+            
+            // Listen for activity updates to refresh other components
+            window.addEventListener('lifeflow:activity:updated', () => {
+                console.log('Activity updated event received');
+                // Reload learning history
+                loadLearningHistory();
+                
+                // Refresh displays
+                if (currentFilterDate) {
+                    filterByDate();
+                } else if (filteredLearnings !== null) {
+                    renderLearningList();
+                } else {
+                    renderLearningList();
+                }
+                renderHeatmap();
+                renderStats();
+                
+                // Refresh chart and statistics
+                if (learningTrendChart) {
+                    learningTrendChart.refresh();
+                }
+                if (learningStatsCards) {
+                    learningStatsCards.refresh();
+                }
+            });
+            
+            // Initial load of learning history
+            console.log('Loading learning history...');
+            loadLearningHistory();
+            console.log('Learnings loaded:', learnings.length);
+            
+            renderLearningList();
+            console.log('Learning list rendered');
+            
+            renderHistoryProgress();
+            console.log('History progress rendered');
+            
+            renderHeatmap();
+            console.log('Heatmap rendered');
+            
+            renderStats();
+            console.log('Stats rendered');
+        }
+        
+        function initLearningTrendChart() {
+            console.log('Initializing learning trend chart...');
+            
+            // 确保chartDataCalculator已加载
+            if (typeof window.chartDataCalculator === 'undefined') {
+                console.error('chartDataCalculator not loaded!');
+                return;
+            }
+            
+            // 确保Chart.js已加载
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js not loaded!');
+                return;
+            }
+            
+            try {
+                learningTrendChart = new TrendChart('learningTrendChart', 'learning', storageManager_learning);
+                console.log('TrendChart instance created');
+                
+                learningTrendChart.init();
+                console.log('TrendChart initialized');
+                
+                // 自动渲染周视图
+                setTimeout(() => {
+                    if (learningTrendChart) {
+                        console.log('Rendering weekly chart...');
+                        learningTrendChart.renderWeeklyChart();
+                    }
+                }, 200);
+                
+                // Setup toggle buttons
+                const container = document.getElementById('learningTrendChartContainer');
+                if (!container) {
+                    console.error('Chart container not found!');
+                    return;
+                }
+                
+                const buttons = container.querySelectorAll('.toggle-btn');
+                console.log('Found toggle buttons:', buttons.length);
+                
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        console.log('Toggle button clicked:', button.getAttribute('data-view'));
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        
+                        const view = button.getAttribute('data-view');
+                        if (view === 'weekly') {
+                            learningTrendChart.renderWeeklyChart();
+                        } else if (view === 'monthly') {
+                            learningTrendChart.renderMonthlyChart();
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error initializing trend chart:', error);
+            }
+        }
+        
+        // Refresh chart and statistics when learning data is updated
+        window.addEventListener('lifeflow:learning:updated', () => {
+            if (learningTrendChart) {
+                learningTrendChart.refresh();
+            }
+            if (learningStatsCards) {
+                learningStatsCards.refresh();
+            }
+        });
+        
+        /**
+         * 执行数据迁移
+         * 检查是否需要迁移学习数据，如果需要则执行迁移
+         */
+        function executeMigration() {
+            try {
+                const migration = new DataMigration();
+                
+                // 检查是否需要迁移学习数据
+                if (migration.needsLearningMigration()) {
+                    console.log('检测到旧的学习数据，开始迁移...');
+                    
+                    const result = migration.migrateLearningData();
+                    
+                    if (result.success) {
+                        console.log(`✅ 学习数据迁移成功！已迁移 ${result.migratedCount} 条记录`);
+                        
+                        // 显示迁移成功提示
+                        if (result.migratedCount > 0) {
+                            showMigrationNotification('success', `数据迁移成功！已迁移 ${result.migratedCount} 条学习记录`);
+                        }
+                    } else {
+                        console.error('❌ 学习数据迁移失败:', result.error);
+                        showMigrationNotification('error', '数据迁移失败，请刷新页面重试');
+                    }
+                } else {
+                    console.log('无需迁移学习数据');
+                }
+                
+                // 验证迁移后的数据完整�?
+                validateMigrationData('learning');
+                
+            } catch (error) {
+                console.error('执行数据迁移时发生错误:', error);
+                showMigrationNotification('error', '数据迁移过程中发生错误');
+            }
+        }
+        
+        /**
+         * 验证迁移后的数据完整性
+         * @param {string} type - 'exercise' | 'learning'
+         */
+        function validateMigrationData(type) {
+            try {
+                const migration = new DataMigration();
+                const status = migration.getMigrationStatus();
+                
+                if (type === 'learning' && status.learning.completed) {
+                    // 检查新数据是否存在
+                    if (!status.learning.hasNewData) {
+                        console.warn('⚠️ 迁移已完成但未找到新数据');
+                        return false;
+                    }
+                    
+                    // 加载新数据并验证
+                    const storageManager = new StorageManager();
+                    const activities = storageManager.loadActivities('learning');
+                    
+                    console.log(`✅ 数据验证通过：找到 ${activities.length} 条学习活动记录`);
+                    
+                    // 验证数据结构
+                    if (activities.length > 0) {
+                        const sample = activities[0];
+                        const requiredFields = ['id', 'date', 'type', 'name', 'duration', 'completed'];
+                        const hasAllFields = requiredFields.every(field => field in sample);
+                        
+                        if (hasAllFields) {
+                            console.log('✅ 数据结构验证通过');
+                            return true;
+                        } else {
+                            console.warn('⚠️ 数据结构不完整');
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('验证数据完整性时发生错误:', error);
+                return false;
+            }
+        }
+        
+        /**
+         * 显示迁移通知
+         * @param {string} type - 'success' | 'error' | 'info'
+         * @param {string} message - 通知消息
+         */
+        function showMigrationNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                background: ${type === 'success' ? '#2196F3' : type === 'error' ? '#E74C3C' : '#667eea'};
+                color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 10000;
+                font-size: 14px;
+                font-weight: 500;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // 添加动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 300);
+        }
+    </script>
+    
+    <!-- Footer -->
+    <footer style="background: rgba(255,255,255,0.95); margin-top: 40px; padding: 30px 20px; border-radius: 16px 16px 0 0; box-shadow: 0 -4px 12px rgba(0,0,0,0.1); text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="color: #2C3E50; margin-bottom: 10px;">🌟 LifeFlow</h4>
+                    <p style="color: #7F8C8D; font-size: 14px;">智能生活助手，帮助您管理生活、运动和学习</p>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="color: #2C3E50; margin-bottom: 10px;">快速链接</h4>
+                    <div style="display: flex; flex-direction: row; gap: 16px; flex-wrap: wrap; justify-content: center;">
+                        <a href="index.html" style="color: #667eea; text-decoration: none; font-size: 14px;">首页</a>
+                        <a href="life.html" style="color: #667eea; text-decoration: none; font-size: 14px;">生活管家</a>
+                        <a href="exercise.html" style="color: #667eea; text-decoration: none; font-size: 14px;">运动伴侣</a>
+                        <a href="learning.html" style="color: #667eea; text-decoration: none; font-size: 14px;">学习助手</a>
+                    </div>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="color: #2C3E50; margin-bottom: 10px;">关于</h4>
+                    <p style="color: #7F8C8D; font-size: 14px;">版本 v3.0.0</p>
+                    <p style="color: #7F8C8D; font-size: 14px;">© 2025 LifeFlow</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #E0E6ED; padding-top: 20px;">
+                <p style="color: #95A5A6; font-size: 12px; margin: 0;">Made with ❤️ by LifeFlow Team</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

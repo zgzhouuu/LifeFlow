@@ -1,0 +1,421 @@
+/**
+ * Main CSS - Base styles and CSS variables
+ */
+
+/* CSS Variables */
+:root {
+  /* Primary Colors */
+  --color-life: #FF8C42;      /* 生活管家 - 温暖橙色 */
+  --color-exercise: #4CAF50;  /* 运动伴侣 - 活力绿色 */
+  --color-learning: #2196F3;  /* 学习助手 - 沉静蓝色 */
+  
+  /* Neutral Colors */
+  --color-bg: #F5F7FA;
+  --color-card-bg: #FFFFFF;
+  --color-text-primary: #2C3E50;
+  --color-text-secondary: #7F8C8D;
+  --color-border: #E0E6ED;
+  
+  /* Status Colors */
+  --color-success: #27AE60;
+  --color-warning: #F39C12;
+  --color-danger: #E74C3C;
+  
+  /* Heat Map Colors */
+  --heat-0: #EBEDF0;
+  --heat-1: #C6E48B;
+  --heat-2: #7BC96F;
+  --heat-3: #239A3B;
+  --heat-4: #196127;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  
+  /* Breakpoints */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base Styles */
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Add a subtle overlay pattern */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+/* Interactive Elements */
+button, .btn {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+button:hover, .btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+button:active, .btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: var(--color-learning);
+  color: white;
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+/* Links */
+a {
+  color: var(--color-learning);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Cards */
+.card {
+  background-color: var(--color-card-bg);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Notifications */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: 8px;
+  background-color: var(--color-card-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideIn 0.3s ease;
+}
+
+.notification-success {
+  border-left: 4px solid var(--color-success);
+}
+
+.notification-error {
+  border-left: 4px solid var(--color-danger);
+}
+
+.notification-warning {
+  border-left: 4px solid var(--color-warning);
+}
+
+.notification-info {
+  border-left: 4px solid var(--color-learning);
+}
+
+.notification.fade-out {
+  animation: slideOut 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Main Layout */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: var(--spacing-lg) 0;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus Styles */
+*:focus-visible {
+  outline: 2px solid var(--color-learning);
+  outline-offset: 2px;
+}
+
+/* Section Styles */
+section {
+  min-height: 400px;
+  padding: var(--spacing-2xl) 0;
+}
+
+.home-section {
+  min-height: auto;
+}
+
+.content-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.welcome-section,
+.function-cards-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+/* Section Content Styles */
+.section-content {
+  width: 100%;
+}
+
+.section-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+/* Exercise Layout */
+.exercise-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
+}
+
+.exercise-form-wrapper,
+.exercise-heatmap-wrapper {
+  min-height: 400px;
+}
+
+/* Calendar and Heatmap Wrappers */
+.calendar-wrapper,
+.learning-heatmap-wrapper {
+  margin-top: var(--spacing-lg);
+}
+
+/* Responsive adjustments for exercise layout */
+@media (max-width: 1024px) {
+  .exercise-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animation keyframes for notifications */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Empty State Styles */
+.empty-notes {
+    text-align: center;
+    padding: 40px 20px;
+    color: #95A5A6;
+    font-size: 14px;
+    background: #F8F9FA;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.empty-notes::before {
+    content: '📝';
+    display: block;
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+/* Note Items */
+.note-item {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid #E0E6ED;
+    transition: all 0.3s ease;
+}
+
+.note-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.note-item.life {
+    border-left-color: var(--color-life);
+}
+
+.note-item.exercise {
+    border-left-color: var(--color-exercise);
+}
+
+.note-item.learning {
+    border-left-color: var(--color-learning);
+}
+
+.note-header {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.note-meta {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.note-content {
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    font-size: 14px;
+}

@@ -1,0 +1,208 @@
+/**
+ * Statistics Cards Styles
+ * Styles for the statistics cards component
+ * Requirements: 15.5
+ */
+
+.statistics-cards-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.statistics-title {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 1024px) {
+    .statistics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .statistics-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stat-card {
+    background: #F5F7FA;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-left: 4px solid #4CAF50;
+    transition: all 150ms ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    font-size: 32px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2C3E50;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #7F8C8D;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.statistics-period-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #E0E6ED;
+    font-size: 14px;
+}
+
+.period-label {
+    color: #7F8C8D;
+    font-weight: 500;
+}
+
+.period-value {
+    color: #2C3E50;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .statistics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .statistics-cards-container {
+        padding: 16px;
+    }
+    
+    .statistics-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-icon {
+        font-size: 28px;
+    }
+    
+    .stat-value {
+        font-size: 24px;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+    }
+}
+
+/* Animation for value updates */
+@keyframes statValueUpdate {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+        color: #4CAF50;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.stat-value.updating {
+    animation: statValueUpdate 300ms ease;
+}
+
+/* Dark mode support */
+[data-theme="dark"] .statistics-cards-container {
+    background: rgba(22, 33, 62, 0.95);
+}
+
+[data-theme="dark"] .stat-card {
+    background: #1a1a2e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .stat-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .stat-value {
+    color: #eaeaea;
+}
+
+[data-theme="dark"] .stat-label {
+    color: #a0a0a0;
+}
+
+[data-theme="dark"] .statistics-period-info {
+    border-top-color: #2a2a3e;
+}
+
+[data-theme="dark"] .period-label {
+    color: #a0a0a0;
+}
+
+[data-theme="dark"] .period-value {
+    color: #eaeaea;
+}
+
+/* Accessibility */
+.stat-card:focus-within {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .statistics-cards-container {
+        box-shadow: none;
+        border: 1px solid #E0E6ED;
+    }
+    
+    .stat-card {
+        break-inside: avoid;
+    }
+}

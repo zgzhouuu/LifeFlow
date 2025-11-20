@@ -1,0 +1,379 @@
+/**
+ * ImageViewer Component Styles
+ * 全屏图片查看器样式
+ */
+
+/* 查看器容器 */
+.image-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.image-viewer.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 遮罩层 */
+.image-viewer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 1;
+}
+
+/* 内容容器 */
+.image-viewer-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* 图片容器 */
+.image-viewer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 60px 80px;
+}
+
+/* 图片元素 */
+.image-viewer-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  transition: opacity 0.3s ease, transform 0.1s ease;
+  cursor: default;
+  touch-action: none;
+}
+
+.image-viewer-image[style*="scale"] {
+  cursor: grab;
+}
+
+.image-viewer-image:active {
+  cursor: grabbing;
+}
+
+/* 关闭按钮 */
+.image-viewer-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.image-viewer-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: rotate(90deg);
+}
+
+.image-viewer-close:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+/* 上一张/下一张按钮 */
+.image-viewer-prev,
+.image-viewer-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  line-height: 1;
+  padding: 0;
+}
+
+.image-viewer-prev {
+  left: 20px;
+}
+
+.image-viewer-next {
+  right: 20px;
+}
+
+.image-viewer-prev:hover,
+.image-viewer-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.image-viewer-prev:active,
+.image-viewer-next:active {
+  transform: translateY(-50%) scale(1);
+}
+
+.image-viewer-prev:disabled,
+.image-viewer-next:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 图片计数器 */
+.image-viewer-counter {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.current-index {
+  font-weight: 700;
+  color: #667eea;
+}
+
+/* 响应式设计 - 平板 */
+@media (max-width: 768px) {
+  .image-viewer-container {
+    padding: 80px 60px 60px;
+  }
+
+  .image-viewer-close {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .image-viewer-prev,
+  .image-viewer-next {
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
+  }
+
+  .image-viewer-prev {
+    left: 15px;
+  }
+
+  .image-viewer-next {
+    right: 15px;
+  }
+
+  .image-viewer-counter {
+    bottom: 20px;
+    font-size: 13px;
+    padding: 6px 16px;
+  }
+}
+
+/* 响应式设计 - 移动端 */
+@media (max-width: 480px) {
+  .image-viewer-container {
+    padding: 70px 10px 50px;
+  }
+
+  .image-viewer-close {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .image-viewer-prev,
+  .image-viewer-next {
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .image-viewer-prev {
+    left: 10px;
+  }
+
+  .image-viewer-next {
+    right: 10px;
+  }
+
+  .image-viewer-counter {
+    bottom: 15px;
+    font-size: 12px;
+    padding: 5px 14px;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .image-viewer-close,
+  .image-viewer-prev,
+  .image-viewer-next {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .image-viewer-close:active {
+    transform: rotate(90deg) scale(0.9);
+  }
+
+  .image-viewer-prev:active {
+    transform: translateY(-50%) scale(0.9);
+  }
+
+  .image-viewer-next:active {
+    transform: translateY(-50%) scale(0.9);
+  }
+
+  /* 移动端隐藏导航按钮，使用滑动手势 */
+  .image-viewer-prev,
+  .image-viewer-next {
+    opacity: 0.5;
+  }
+}
+
+/* 加载动画 */
+@keyframes imageViewerFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.image-viewer.active .image-viewer-content {
+  animation: imageViewerFadeIn 0.3s ease;
+}
+
+/* 防止图片被选中和拖动 */
+.image-viewer-image {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+/* 缩放提示（可选） */
+.image-viewer-zoom-hint {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.image-viewer-zoom-hint.show {
+  opacity: 1;
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .image-viewer-container {
+    padding: 40px 80px;
+  }
+
+  .image-viewer-close {
+    top: 10px;
+    right: 10px;
+  }
+
+  .image-viewer-counter {
+    bottom: 10px;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .image-viewer-close,
+  .image-viewer-prev,
+  .image-viewer-next {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .image-viewer-counter {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .image-viewer,
+  .image-viewer-image,
+  .image-viewer-close,
+  .image-viewer-prev,
+  .image-viewer-next {
+    transition: none;
+  }
+
+  .image-viewer.active .image-viewer-content {
+    animation: none;
+  }
+}

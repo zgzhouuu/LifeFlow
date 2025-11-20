@@ -1,0 +1,942 @@
+/**
+ * Responsive Layout Optimization
+ * 响应式布局优化 - 确保所有页面在桌面端、平板端和移动端正确显示
+ * 
+ * Breakpoints:
+ * - Desktop: > 1200px
+ * - Tablet: 768px - 1200px
+ * - Mobile: < 768px
+ */
+
+/* ==================== 全局响应式基础 ==================== */
+
+/* 确保所有触摸目标至少 44x44px */
+@media (max-width: 768px) {
+  button,
+  .btn,
+  a.btn,
+  input[type="button"],
+  input[type="submit"],
+  .clickable,
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 自定义滚动条 - 桌面端 */
+@media (min-width: 1200px) {
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #F5F7FA;
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #CBD5E0;
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #A0AEC0;
+  }
+}
+
+/* 平板端滚动条 */
+@media (min-width: 768px) and (max-width: 1200px) {
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #F5F7FA;
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #CBD5E0;
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #A0AEC0;
+  }
+}
+
+/* 移动端隐藏滚动条 */
+@media (max-width: 768px) {
+  *::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+}
+
+/* ==================== 容器响应式 ==================== */
+
+/* 桌面端 (>1200px) */
+@media (min-width: 1200px) {
+  .container,
+  .content-section {
+    max-width: 1280px;
+    padding: 0 var(--spacing-xl, 32px);
+  }
+
+  .profile-container {
+    max-width: 900px;
+  }
+
+  .social-container {
+    max-width: 1400px;
+  }
+}
+
+/* 平板端 (768px - 1200px) */
+@media (min-width: 768px) and (max-width: 1200px) {
+  .container,
+  .content-section {
+    max-width: 100%;
+    padding: 0 var(--spacing-lg, 24px);
+  }
+
+  .profile-container {
+    max-width: 100%;
+    padding: 0 var(--spacing-lg, 24px);
+  }
+
+  .social-container {
+    max-width: 100%;
+    padding: 0 var(--spacing-md, 16px);
+  }
+}
+
+/* 移动端 (<768px) */
+@media (max-width: 768px) {
+  .container,
+  .content-section {
+    padding: 0 var(--spacing-md, 16px);
+  }
+
+  .profile-container {
+    padding: 0 var(--spacing-md, 16px);
+    margin: 20px auto;
+  }
+
+  .social-container {
+    padding: 0 var(--spacing-sm, 8px);
+  }
+
+  body {
+    padding: var(--spacing-sm, 8px);
+  }
+}
+
+/* ==================== 导航栏响应式 ==================== */
+
+/* 桌面端导航 */
+@media (min-width: 1200px) {
+  .nav-container {
+    height: 64px;
+    padding: 0 var(--spacing-xl, 32px);
+  }
+
+  .nav-links {
+    gap: var(--spacing-xl, 32px);
+  }
+
+  .nav-link {
+    padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+    font-size: 16px;
+  }
+}
+
+/* 平板端导航 */
+@media (min-width: 768px) and (max-width: 1200px) {
+  .nav-container {
+    height: 60px;
+    padding: 0 var(--spacing-lg, 24px);
+  }
+
+  .nav-links {
+    gap: var(--spacing-lg, 24px);
+  }
+
+  .nav-link {
+    padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+    font-size: 15px;
+  }
+}
+
+/* 移动端导航 */
+@media (max-width: 768px) {
+  .nav-container {
+    height: 56px;
+    padding: 0 var(--spacing-md, 16px);
+  }
+
+  .nav-links {
+    gap: var(--spacing-sm, 8px);
+  }
+
+  .nav-link {
+    padding: 12px;
+    font-size: 14px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-site-name {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-site-name {
+    display: none;
+  }
+
+  .nav-links {
+    gap: 4px;
+  }
+}
+
+/* ==================== 个人资料页面响应式 ==================== */
+
+/* 桌面端 */
+@media (min-width: 1200px) {
+  .profile-card {
+    padding: 40px;
+  }
+
+  .profile-header {
+    gap: 32px;
+  }
+
+  .avatar-container {
+    width: 140px;
+    height: 140px;
+  }
+
+  .avatar-placeholder {
+    font-size: 56px;
+  }
+
+  .username-display {
+    font-size: 28px;
+  }
+
+  .nickname-display {
+    font-size: 20px;
+  }
+}
+
+/* 平板端 */
+@media (min-width: 768px) and (max-width: 1200px) {
+  .profile-card {
+    padding: 32px;
+  }
+
+  .profile-header {
+    gap: 24px;
+  }
+
+  .avatar-container {
+    width: 120px;
+    height: 120px;
+  }
+
+  .avatar-placeholder {
+    font-size: 48px;
+  }
+
+  .username-display {
+    font-size: 24px;
+  }
+
+  .nickname-display {
+    font-size: 18px;
+  }
+}
+
+/* 移动端 */
+@media (max-width: 768px) {
+  .profile-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .avatar-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatar-placeholder {
+    font-size: 40px;
+  }
+
+  .username-display {
+    font-size: 20px;
+  }
+
+  .nickname-display {
+    font-size: 16px;
+  }
+
+  .nickname-input {
+    width: 100%;
+  }
+
+  .profile-details {
+    grid-template-columns: 1fr;
+  }
+
+  .top-bar {
+    padding: 12px 16px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .back-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 44px;
+  }
+}
+
+/* ==================== 社交页面响应式 ==================== */
+
+/* 桌面端 - 三列布局 (>1200px) */
+@media (min-width: 1200px) {
+  .social-container {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px;
+    gap: 24px;
+  }
+
+  .social-sidebar {
+    position: sticky;
+    top: 20px;
+  }
+
+  .sidebar-card {
+    padding: 24px;
+  }
+
+  .post-editor-card {
+    padding: 24px;
+  }
+}
+
+/* 平板端 - 两列布局 (768px - 1200px) */
+@media (min-width: 768px) and (max-width: 1200px) {
+  .social-container {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+  }
+
+  .social-sidebar-left {
+    display: none;
+  }
+
+  .social-sidebar-right {
+    display: block;
+    position: sticky;
+    top: 20px;
+  }
+
+  .sidebar-card {
+    padding: 20px;
+  }
+
+  .post-editor-card {
+    padding: 20px;
+  }
+}
+
+/* 移动端 - 单列布局 (<768px) */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 80px; /* 为底部标签栏留出空间 */
+  }
+
+  .social-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .social-sidebar {
+    display: none;
+    position: static;
+  }
+
+  /* 根据移动端视图显示对应内容 */
+  .social-container[data-mobile-view="feed"] .social-main {
+    display: block;
+  }
+
+  .social-container[data-mobile-view="feed"] .social-sidebar {
+    display: none;
+  }
+
+  .social-container[data-mobile-view="friends"] .social-sidebar-left {
+    display: block;
+  }
+
+  .social-container[data-mobile-view="friends"] .social-main,
+  .social-container[data-mobile-view="friends"] .social-sidebar-right {
+    display: none;
+  }
+
+  .social-container[data-mobile-view="profile"] .social-sidebar-right {
+    display: block;
+  }
+
+  .social-container[data-mobile-view="profile"] .social-main,
+  .social-container[data-mobile-view="profile"] .social-sidebar-left {
+    display: none;
+  }
+
+  .mobile-tab-bar {
+    display: flex;
+  }
+
+  .sidebar-card,
+  .post-editor-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .post-input {
+    min-height: 100px;
+    font-size: 14px;
+  }
+
+  .editor-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .editor-actions {
+    justify-content: space-between;
+  }
+
+  .editor-btn {
+    flex: 1;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .publish-btn {
+    flex: 1;
+    min-height: 44px;
+  }
+}
+
+/* ==================== 输入框自动调整布局 ==================== */
+
+/* 移动端输入框聚焦时的布局调整 */
+@media (max-width: 768px) {
+  /* 防止iOS自动缩放 */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* 输入框聚焦时调整视口 */
+  .chat-input-field:focus,
+  .post-input:focus,
+  .comment-input:focus,
+  textarea:focus {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* 虚拟键盘出现时的布局调整 */
+  body.keyboard-visible {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  body.keyboard-visible .mobile-tab-bar {
+    display: none;
+  }
+
+  body.keyboard-visible .chat-messages {
+    max-height: calc(100vh - 200px);
+  }
+}
+
+/* ==================== 触摸目标优化 ==================== */
+
+/* 确保所有可交互元素在移动端至少 44x44px */
+@media (max-width: 768px) {
+  .post-action-btn,
+  .editor-btn,
+  .friend-item,
+  .tag-item,
+  .tab-item,
+  .menu-item,
+  .achievement-item,
+  .visibility-option,
+  .challenge-action-btn,
+  .leaderboard-item,
+  .notification-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* 图标按钮 */
+  .icon-btn,
+  .close-btn,
+  .menu-btn,
+  .action-icon-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 链接 */
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ==================== 触摸设备优化 ==================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* 移除悬停效果 */
+  .post-card:hover,
+  .friend-item:hover,
+  .tag-item:hover,
+  .editor-btn:hover {
+    transform: none;
+    box-shadow: inherit;
+  }
+
+  /* 添加点击反馈 */
+  .post-card:active,
+  .friend-item:active,
+  .tag-item:active,
+  .editor-btn:active,
+  .post-action-btn:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+
+  /* 移除点击高亮 */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* 确保触摸目标 */
+  button,
+  a,
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ==================== 组件特定响应式 ==================== */
+
+/* PostCard 响应式 */
+@media (max-width: 768px) {
+  .post-card {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .post-images.single {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-card {
+    padding: 12px;
+  }
+
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+}
+
+/* PostEditor 响应式 */
+@media (max-width: 768px) {
+  .post-editor-textarea {
+    min-height: 100px;
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .post-editor-images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .editor-action-btn .btn-text {
+    display: none;
+  }
+
+  .editor-action-btn {
+    padding: 10px;
+    min-width: 44px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .post-editor-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .editor-action-buttons {
+    justify-content: space-between;
+  }
+
+  .editor-action-btn {
+    flex: 1;
+  }
+
+  .editor-publish-btn {
+    width: 100%;
+  }
+}
+
+/* FriendList 响应式 */
+@media (max-width: 768px) {
+  .friend-avatar,
+  .result-avatar,
+  .request-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .friend-name,
+  .result-name,
+  .request-name {
+    font-size: 14px;
+  }
+
+  .friend-action-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
+/* ChatWindow 响应式 */
+@media (max-width: 768px) {
+  .chat-message {
+    max-width: 85%;
+  }
+
+  .chat-input-field {
+    font-size: 16px; /* 防止iOS自动缩放 */
+  }
+
+  .chat-encouragements-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-header {
+    padding: 12px;
+  }
+
+  .chat-friend-avatar,
+  .chat-friend-avatar-placeholder {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .chat-messages {
+    padding: 16px;
+  }
+
+  .chat-message-content {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* HealthPanel 响应式 */
+@media (max-width: 768px) {
+  .health-panel {
+    padding: 16px;
+  }
+
+  .health-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .bmi-display {
+    font-size: 36px;
+  }
+}
+
+/* BadgeWall 响应式 */
+@media (max-width: 768px) {
+  .badge-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .badge-item {
+    padding: 12px;
+  }
+
+  .badge-icon {
+    font-size: 32px;
+  }
+}
+
+/* Leaderboard 响应式 */
+@media (max-width: 768px) {
+  .leaderboard-item {
+    padding: 12px;
+  }
+
+  .leaderboard-rank {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .leaderboard-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ChallengeCard 响应式 */
+@media (max-width: 768px) {
+  .challenge-card {
+    padding: 16px;
+  }
+
+  .challenge-progress-bar {
+    height: 6px;
+  }
+
+  .participant-avatar {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* NotificationCenter 响应式 */
+@media (max-width: 768px) {
+  .notification-center {
+    width: 100%;
+    max-width: 100%;
+    right: 0;
+    left: 0;
+    border-radius: 0;
+  }
+
+  .notification-item {
+    padding: 12px;
+  }
+
+  .notification-avatar {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ==================== 打印样式 ==================== */
+
+@media print {
+  /* 隐藏不需要打印的元素 */
+  .nav-container,
+  .mobile-tab-bar,
+  .editor-actions,
+  .post-actions,
+  .friend-actions,
+  .chat-input-area,
+  .notification-center,
+  button,
+  .btn {
+    display: none !important;
+  }
+
+  /* 优化打印布局 */
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .post-card,
+  .profile-card,
+  .sidebar-card {
+    box-shadow: none;
+    border: 1px solid #E0E6ED;
+    page-break-inside: avoid;
+  }
+
+  /* 移除渐变背景 */
+  body::before {
+    display: none;
+  }
+}
+
+/* ==================== 高对比度模式 ==================== */
+
+@media (prefers-contrast: high) {
+  button,
+  .btn,
+  .card {
+    border: 2px solid currentColor;
+  }
+
+  .post-card,
+  .profile-card,
+  .sidebar-card {
+    border: 2px solid #2C3E50;
+  }
+}
+
+/* ==================== 减少动画模式 ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==================== 横屏模式优化 ==================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .chat-messages {
+    max-height: calc(100vh - 150px);
+  }
+
+  .post-feed-list {
+    max-height: calc(100vh - 150px);
+  }
+
+  .mobile-tab-bar {
+    padding: 4px 0;
+  }
+
+  .tab-item {
+    padding: 4px;
+  }
+
+  .tab-label {
+    display: none;
+  }
+}
+
+/* ==================== 超小屏幕优化 (<576px) ==================== */
+
+@media (max-width: 576px) {
+  body {
+    padding: 8px;
+    padding-bottom: 80px;
+  }
+
+  .sidebar-card,
+  .post-editor-card,
+  .post-card {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .post-input {
+    min-height: 80px;
+    padding: 12px;
+  }
+
+  .editor-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .editor-btn span:last-child {
+    display: none;
+  }
+
+  .publish-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .tab-icon {
+    font-size: 20px;
+  }
+
+  .tab-label {
+    font-size: 11px;
+  }
+}
+
+/* ==================== 超大屏幕优化 (>1600px) ==================== */
+
+@media (min-width: 1600px) {
+  .container,
+  .content-section {
+    max-width: 1440px;
+  }
+
+  .social-container {
+    max-width: 1600px;
+    grid-template-columns: 320px 1fr 360px;
+    gap: 32px;
+  }
+
+  .profile-container {
+    max-width: 1000px;
+  }
+}

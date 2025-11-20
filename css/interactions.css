@@ -1,0 +1,231 @@
+/**
+ * 交互反馈样式
+ * 为所有按钮和交互元素提供统一的悬停和点击效果
+ */
+
+/* 通用按钮样式 */
+button,
+.btn,
+input[type="submit"],
+input[type="button"],
+.interactive {
+  cursor: pointer;
+  transition: all 150ms ease;
+  user-select: none;
+}
+
+/* 悬停效果 */
+button:hover,
+.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.interactive:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* 点击效果 */
+button:active,
+.btn:active,
+input[type="submit"]:active,
+input[type="button"]:active,
+.interactive:active {
+  transform: scale(0.95);
+  transition: transform 100ms ease;
+}
+
+/* 禁用状态 */
+button:disabled,
+.btn:disabled,
+input[type="submit"]:disabled,
+input[type="button"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* 链接样式 */
+a {
+  transition: all 150ms ease;
+}
+
+a:hover {
+  opacity: 0.85;
+}
+
+/* 卡片悬停效果 - 移除scale避免放大 */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.card:active {
+  transform: translateY(-2px);
+}
+
+/* 导航链接效果 */
+.nav-bar a {
+  transition: all 150ms ease;
+}
+
+.nav-bar a:hover {
+  transform: translateY(-2px);
+}
+
+.nav-bar a:active {
+  transform: scale(0.95);
+}
+
+/* 复选框和单选框 */
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+input[type="checkbox"]:hover,
+input[type="radio"]:hover {
+  transform: scale(1.1);
+}
+
+input[type="checkbox"]:active,
+input[type="radio"]:active {
+  transform: scale(0.95);
+}
+
+/* 输入框焦点效果 */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+textarea,
+select {
+  transition: all 150ms ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 待办事项悬停效果 */
+.todo-item {
+  transition: all 150ms ease;
+}
+
+.todo-item:hover {
+  transform: translateX(4px);
+  background: #E8EBF0;
+}
+
+/* 笔记项悬停效果 */
+.note-item {
+  transition: all 150ms ease;
+}
+
+.note-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 日历日期悬停效果 */
+.calendar-day {
+  transition: all 150ms ease;
+}
+
+.calendar-day:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.calendar-day:active {
+  transform: scale(0.95);
+}
+
+/* 任务项按钮效果 */
+.task-delete,
+.task-edit,
+.edit-btn,
+.delete-btn {
+  transition: all 150ms ease;
+}
+
+.task-delete:hover,
+.task-edit:hover,
+.edit-btn:hover,
+.delete-btn:hover {
+  transform: scale(1.05);
+}
+
+.task-delete:active,
+.task-edit:active,
+.edit-btn:active,
+.delete-btn:active {
+  transform: scale(0.95);
+}
+
+/* 进度条动画 */
+.progress-fill {
+  transition: width 300ms ease;
+}
+
+/* 模态框动画 */
+.modal {
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.modal.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 通知动画 */
+.notification,
+.toast {
+  transition: all 300ms ease;
+}
+
+/* 加载状态 */
+.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* 成功状态动画 */
+@keyframes successPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.success-animation {
+  animation: successPulse 300ms ease;
+}
+
+/* 错误抖动动画 */
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.error-animation {
+  animation: errorShake 300ms ease;
+}

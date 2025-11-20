@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - 智能生活助手</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/interactions.css">
+    <link rel="stylesheet" href="css/toastNotification.css">
+    <link rel="stylesheet" href="css/notificationCenter.css">
+    <link rel="stylesheet" href="css/exportModal.css">
+    <link rel="stylesheet" href="css/backupRestoreModal.css">
+    <link rel="stylesheet" href="css/achievements.css">
+    <link rel="stylesheet" href="css/aiAssistant.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 20px 0 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* 页面过渡样式 */
+        body.page-transitioning {
+            pointer-events: none;
+        }
+        
+        .top-bar {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .user-info { 
+            font-size: 18px; 
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            overflow: hidden;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .notification-icon {
+            position: relative;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-icon:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #FF4444;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+            border: 2px solid white;
+        }
+        
+        .export-btn,
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .export-btn:hover,
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+        
+        .page-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.98);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            align-self: stretch;
+        }
+        
+        .sidebar h2 {
+            color: #2C3E50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #E0E6ED;
+        }
+        
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 8px;
+            margin-right: -8px;
+            min-height: 0;
+        }
+        
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar-content::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 3px;
+        }
+        
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: #CBD5E0;
+            border-radius: 3px;
+        }
+        
+        .sidebar-content::-webkit-scrollbar-thumb:hover {
+            background: #A0AEC0;
+        }
+        
+        .todo-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E0E6ED;
+        }
+        
+        .todo-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .todo-section h3 {
+            color: #2C3E50;
+            font-size: 15px;
+            margin-bottom: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .todo-item {
+            background: linear-gradient(135deg, #F8F9FA 0%, #F5F7FA 100%);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid #E8EBF0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        
+        .todo-item:hover {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
+            transform: translateX(4px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-color: #CBD5E0;
+        }
+        
+        .todo-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .todo-item.completed {
+            opacity: 0.6;
+        }
+        
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+        }
+        
+        .todo-text {
+            flex: 1;
+            font-size: 14px;
+            color: #2C3E50;
+        }
+        
+        .goal-progress {
+            background: linear-gradient(135deg, #F8F9FA 0%, #F5F7FA 100%);
+            padding: 14px;
+            border-radius: 10px;
+            transition: all 300ms ease;
+            border: 1px solid #E8EBF0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            margin-bottom: 10px;
+        }
+        
+        .goal-progress:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-color: #CBD5E0;
+        }
+        
+        .goal-progress.completed {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 1px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        }
+        
+        .goal-title {
+            font-size: 14px;
+            color: #2C3E50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E8EBF0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #66BB6A 50%, #81C784 100%);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(76, 175, 80, 0.3);
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-text {
+            font-size: 12px;
+            color: #7F8C8D;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .progress-check {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .empty-todos {
+            text-align: center;
+            color: #7F8C8D;
+            padding: 15px;
+            font-size: 13px;
+            font-style: italic;
+        }
+        
+        .todo-item label {
+            cursor: pointer;
+        }
+        
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-self: stretch;
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+        
+        .card:active {
+            transform: translateY(-5px) scale(1);
+        }
+        
+        .card-icon { font-size: 48px; margin-bottom: 15px; }
+        .card-title { font-size: 24px; font-weight: bold; margin-bottom: 8px; color: #2C3E50; }
+        .card-desc { font-size: 14px; color: #7F8C8D; line-height: 1.6; }
+        
+        .card.life { border-top: 4px solid #FF8C42; }
+        .card.exercise { border-top: 4px solid #4CAF50; }
+        .card.learning { border-top: 4px solid #2196F3; }
+        .card.social { border-top: 4px solid #FF6B6B; }
+        
+        .notes-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .notes-section h2 {
+            color: #2C3E50;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .note-category {
+            background: #F5F7FA;
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .note-category h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            color: #2C3E50;
+        }
+        
+        .note-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #667eea;
+            transition: all 0.3s;
+        }
+        
+        .note-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .note-item.life { border-left-color: #FF8C42; }
+        .note-item.exercise { border-left-color: #4CAF50; }
+        .note-item.learning { border-left-color: #2196F3; }
+        
+        .note-header { font-weight: 600; color: #2C3E50; margin-bottom: 4px; font-size: 13px; }
+        .note-meta { font-size: 11px; color: #7F8C8D; margin-bottom: 4px; }
+        .note-content { color: #2C3E50; line-height: 1.4; font-size: 12px; }
+        .empty-notes { text-align: center; color: #7F8C8D; padding: 15px; font-size: 13px; }
+        
+        /* Badge Section Styles */
+        .badges-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .badges-section h2 {
+            color: #2C3E50;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        
+        .badges-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .badge-category h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #2C3E50;
+        }
+        
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .badge-item {
+            background: #F5F7FA;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+        }
+        
+        .badge-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        
+        .badge-item.earned {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffe8a3 100%);
+            border-color: #FFD700;
+        }
+        
+        .badge-item.earned .badge-icon {
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .badge-item.unearned {
+            opacity: 0.6;
+            filter: grayscale(50%);
+        }
+        
+        .badge-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .badge-name {
+            font-weight: 600;
+            color: #2C3E50;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .badge-description {
+            font-size: 11px;
+            color: #7F8C8D;
+            margin-bottom: 8px;
+        }
+        
+        .badge-progress {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .badge-earned-date {
+            font-size: 10px;
+            color: #27AE60;
+            margin-top: 4px;
+        }
+        
+        .badge-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .badge-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .badge-item:hover .badge-tooltip {
+            opacity: 1;
+        }
+        
+        .badge-progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #E0E6ED;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .badge-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+        }
+        
+        .empty-badges {
+            text-align: center;
+            color: #7F8C8D;
+            padding: 20px;
+            font-size: 13px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 1024px) {
+            .page-wrapper { 
+                flex-direction: column; 
+            }
+            .sidebar { 
+                width: 100%;
+            }
+            .cards { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+            .notes-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .badges-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 36px; }
+            .top-bar { 
+                flex-direction: column; 
+                gap: 10px; 
+                align-items: stretch;
+            }
+            .top-bar-actions {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .export-btn,
+            .logout-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+            .cards { 
+                grid-template-columns: 1fr; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="user-info">
+            <div class="user-avatar" id="userAvatar" onclick="goToProfile()" title="个人资料">
+                👤
+            </div>
+            <span id="userInfo">加载中...</span>
+        </div>
+        <div class="top-bar-actions">
+            <div class="notification-icon" id="notificationIcon" onclick="toggleNotificationCenter()" title="通知中心">
+                🔔
+                <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            </div>
+            <div class="notification-icon" onclick="goToSocial()" title="社交广场">
+                👥
+            </div>
+            <button class="export-btn" id="openBackupModal">
+                <span>💾</span>
+                <span>备份恢复</span>
+            </button>
+            <button class="export-btn" id="openExportModal">
+                <span>📊</span>
+                <span>导出数据</span>
+            </button>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1>🌟 LifeFlow</h1>
+        <p>智能生活助手 - 让生活更有条理</p>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="sidebar">
+            <h2>📋 今日待办</h2>
+            
+            <div class="sidebar-content">
+                <div class="todo-section">
+                    <h3>📝 生活任务</h3>
+                    <div id="lifeTodos"></div>
+                </div>
+                
+                <div class="todo-section">
+                    <h3>💪 运动目标</h3>
+                    <div id="exerciseGoals"></div>
+                </div>
+                
+                <div class="todo-section">
+                    <h3>📚 学习目标</h3>
+                    <div id="learningGoals"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="cards">
+                <a href="life.html" class="card life">
+                    <div class="card-icon">📝</div>
+                    <div class="card-title">生活管家</div>
+                    <div class="card-desc">管理日常任务，记录生活点滴</div>
+                </a>
+
+                <a href="exercise.html" class="card exercise">
+                    <div class="card-icon">💪</div>
+                    <div class="card-title">运动伴侣</div>
+                    <div class="card-desc">记录运动数据，保持健康生活</div>
+                </a>
+
+                <a href="learning.html" class="card learning">
+                    <div class="card-icon">📚</div>
+                    <div class="card-title">学习助手</div>
+                    <div class="card-desc">追踪学习进度，提升学习效率</div>
+                </a>
+
+                <a href="social.html" class="card social">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-title">社交广场</div>
+                    <div class="card-desc">分享动态，互动交流，共同进步</div>
+                </a>
+            </div>
+
+            <div class="notes-section">
+                <h2>📖 今日心得体会</h2>
+                <div class="notes-grid">
+                    <div class="note-category">
+                        <h3>📝 生活管家</h3>
+                        <div id="lifeNotes"></div>
+                    </div>
+                    <div class="note-category">
+                        <h3>💪 运动伴侣</h3>
+                        <div id="exerciseNotes"></div>
+                    </div>
+                    <div class="note-category">
+                        <h3>📚 学习助手</h3>
+                        <div id="learningNotes"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成就展示区域 -->
+            <div id="achievementDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        const currentUser = localStorage.getItem('lifeflow_current_user');
+        if (!currentUser) window.location.href = 'login.html';
+
+        const greetings = ['你好', '又见面了', '欢迎回来', '今天也要加油哦'];
+        document.getElementById('userInfo').textContent = `${currentUser}，${greetings[Math.floor(Math.random() * greetings.length)]}！`;
+
+        // 导航函数
+        function goToProfile() {
+            window.location.href = 'profile.html';
+        }
+
+        function goToSocial() {
+            window.location.href = 'social.html';
+        }
+
+        function toggleNotificationCenter() {
+            if (window.notificationCenter) {
+                window.notificationCenter.toggle();
+            }
+        }
+
+        // 加载用户头像
+        function loadUserAvatar() {
+            try {
+                // 使用 StorageManager 加载用户资料
+                if (typeof StorageManager !== 'undefined') {
+                    const storageManager = new StorageManager();
+                    const profileKey = `profile`;
+                    const profileData = storageManager.loadData(profileKey);
+                    
+                    if (profileData && profileData.avatar) {
+                        const avatarEl = document.getElementById('userAvatar');
+                        avatarEl.innerHTML = `<img src="${profileData.avatar}" alt="头像">`;
+                    }
+                }
+            } catch (error) {
+                console.error('加载用户头像失败:', error);
+            }
+        }
+
+        // 更新通知徽章
+        function updateNotificationBadge() {
+            try {
+                let totalUnread = 0;
+
+                // 获取未读消息数量（从 notificationService）
+                if (typeof notificationService !== 'undefined') {
+                    const unreadCount = notificationService.getUnreadCount(currentUser);
+                    totalUnread += unreadCount;
+                }
+
+                // 获取待处理的好友请求数量
+                if (typeof StorageManager !== 'undefined') {
+                    const storageManager = new StorageManager();
+                    const friendRequests = storageManager.load('friend_requests') || [];
+                    const pendingRequests = friendRequests.filter(r => 
+                        r.toUserId === currentUser && r.status === 'pending'
+                    );
+                    totalUnread += pendingRequests.length;
+                }
+
+                // 更新徽章显示
+                const badge = document.getElementById('notificationBadge');
+                if (totalUnread > 0) {
+                    badge.textContent = totalUnread > 99 ? '99+' : totalUnread;
+                    badge.style.display = 'block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('更新通知徽章失败:', error);
+            }
+        }
+
+        // 监听资料更新事件
+        window.addEventListener('profile:updated', function(e) {
+            if (e.detail && e.detail.username === currentUser) {
+                loadUserAvatar();
+            }
+        });
+
+        // 监听通知更新事件
+        window.addEventListener('notifications:updated', function(e) {
+            if (e.detail && e.detail.userId === currentUser) {
+                updateNotificationBadge();
+            }
+        });
+
+        const today = new Date().toISOString().split('T')[0];
+        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+        function loadLifeNotes(today, yesterday) {
+            const container = document.getElementById('lifeNotes');
+            // 迁移旧数据
+            userDataManager.migrateOldData('lifeflow_life_tasks', 'life_tasks');
+            const lifeTasks = userDataManager.loadData('life_tasks', {});
+            
+            let notes = [];
+            if (lifeTasks[today]) {
+                notes = lifeTasks[today].filter(task => task.note).map(task => ({
+                    title: task.text,
+                    content: task.note,
+                    date: today
+                }));
+            }
+            
+            if (notes.length === 0 && lifeTasks[yesterday]) {
+                notes = lifeTasks[yesterday].filter(task => task.note).map(task => ({
+                    title: task.text,
+                    content: task.note,
+                    date: yesterday
+                }));
+            }
+
+            container.innerHTML = notes.length === 0 
+                ? '<div class="empty-notes">今天还没有记录</div>'
+                : notes.map(note => `
+                    <div class="note-item life">
+                        <div class="note-header">${note.title}</div>
+                        <div class="note-meta">${note.date === today ? '今天' : '昨天'}</div>
+                        <div class="note-content">💭 ${note.content}</div>
+                    </div>
+                `).join('');
+        }
+
+        function loadExerciseNotes(today, yesterday) {
+            const container = document.getElementById('exerciseNotes');
+            
+            // 使用 StorageManager 读取用户隔离的数据
+            let allActivities = [];
+            if (typeof StorageManager !== 'undefined') {
+                const storageManager = new StorageManager();
+                allActivities = storageManager.loadActivities('exercise');
+            } else {
+                // 降级到旧方式
+                const data = localStorage.getItem('lifeflow_exercise_activities');
+                if (data) {
+                    try {
+                        allActivities = JSON.parse(data);
+                    } catch (e) {
+                        console.error('Error parsing exercise activities:', e);
+                    }
+                }
+            }
+            const completedActivities = allActivities.filter(a => a.completed && a.notes);
+            
+            let notes = completedActivities.filter(a => a.date === today);
+            if (notes.length === 0) notes = completedActivities.filter(a => a.date === yesterday);
+
+            container.innerHTML = notes.length === 0
+                ? '<div class="empty-notes">今天还没有记录</div>'
+                : notes.map(note => `
+                    <div class="note-item exercise">
+                        <div class="note-header">${note.name}</div>
+                        <div class="note-meta">${note.date === today ? '今天' : '昨天'} · ${note.duration}分钟</div>
+                        <div class="note-content">💭 ${note.notes}</div>
+                    </div>
+                `).join('');
+        }
+
+        function loadLearningNotes(today, yesterday) {
+            const container = document.getElementById('learningNotes');
+            
+            // 使用 StorageManager 读取用户隔离的数据
+            let allActivities = [];
+            if (typeof StorageManager !== 'undefined') {
+                const storageManager = new StorageManager();
+                allActivities = storageManager.loadActivities('learning');
+            } else {
+                // 降级到旧方式
+                const data = localStorage.getItem('lifeflow_learning_activities');
+                if (data) {
+                    try {
+                        allActivities = JSON.parse(data);
+                    } catch (e) {
+                        console.error('Error parsing learning activities:', e);
+                    }
+                }
+            }
+            const completedActivities = allActivities.filter(a => a.completed && a.notes);
+            
+            let notes = completedActivities.filter(a => a.date === today);
+            if (notes.length === 0) notes = completedActivities.filter(a => a.date === yesterday);
+
+            container.innerHTML = notes.length === 0
+                ? '<div class="empty-notes">今天还没有记录</div>'
+                : notes.map(note => `
+                    <div class="note-item learning">
+                        <div class="note-header">${note.name}</div>
+                        <div class="note-meta">${note.date === today ? '今天' : '昨天'} · ${note.duration}分钟</div>
+                        <div class="note-content">💭 ${note.notes}</div>
+                    </div>
+                `).join('');
+        }
+
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('lifeflow_current_user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function loadAll() {
+            loadLifeNotes(today, yesterday);
+            loadExerciseNotes(today, yesterday);
+            loadLearningNotes(today, yesterday);
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('首页初始化开始...');
+            
+            // 加载用户头像和通知徽章
+            loadUserAvatar();
+            updateNotificationBadge();
+            
+            // 定期更新通知徽章
+            setInterval(updateNotificationBadge, 30000);
+            
+            // 加载心得体会
+            loadAll();
+            setInterval(loadAll, 30000);
+            
+            // 初始化成就展示
+            if (typeof AchievementDisplay !== 'undefined') {
+                console.log('初始化成就展示组件...');
+                const achievementDisplay = new AchievementDisplay('achievementDisplay');
+                achievementDisplay.init();
+                
+                // 监听数据更新事件，刷新成就展示和心得体会
+                window.addEventListener('lifeflow:activity:updated', () => {
+                    console.log('检测到活动更新，刷新数据...');
+                    achievementDisplay.refresh();
+                    loadAll(); // 刷新所有数据包括心得体会
+                });
+                
+                // 监听用户切换事件
+                window.addEventListener('lifeflow:user:changed', () => {
+                    console.log('检测到用户切换，重新加载所有数据...');
+                    // 重新加载所有数据
+                    loadAll();
+                    // 刷新成就展示
+                    achievementDisplay.refresh();
+                    // 重新加载头像和通知
+                    loadUserAvatar();
+                    updateNotificationBadge();
+                });
+            } else {
+                console.error('AchievementDisplay 组件未加载！');
+            }
+            
+            // 初始化AI助手
+            if (typeof AIAssistant !== 'undefined') {
+                console.log('初始化AI助手...');
+                aiAssistant = new AIAssistant();
+                window.aiAssistant = aiAssistant;
+            } else {
+                console.error('AIAssistant 组件未加载！');
+            }
+            
+            console.log('首页初始化完成');
+        });
+    </script>
+    
+    <!-- 目标管理组件 -->
+    <script src="js/models/CustomGoal.js"></script>
+    
+    <!-- 用户数据管理工具 -->
+    <script src="js/utils/userDataManager.js"></script>
+    
+    <!-- 数据模型 -->
+    <script src="js/models/Activity.js"></script>
+    
+    <!-- 模块 -->
+    <script src="js/modules/storageManager.js"></script>
+    <script src="js/modules/achievementManager.js"></script>
+    
+    <!-- 组件 -->
+    <script src="js/components/todayTodoPanel.js"></script>
+    <script src="js/components/achievementDisplay.js"></script>
+    
+    <!-- AI助手 -->
+    <script src="js/services/deepseekService.js"></script>
+    <script src="js/components/aiAssistant.js"></script>
+    
+    <!-- 页面过渡脚本 -->
+    <script src="js/utils/pageTransition.js"></script>
+    
+    <!-- Toast Notification System -->
+    <script type="module">
+        import { ToastNotification } from './js/components/toastNotification.js';
+        
+        // Initialize toast notification system
+        const toastNotification = new ToastNotification();
+        window.toastNotification = toastNotification;
+    </script>
+    
+    <!-- Social Services -->
+    <script src="js/services/notificationService.js" type="module"></script>
+    
+    <!-- Notification System -->
+    <script type="module">
+        import { NotificationCenter } from './js/components/notificationCenter.js';
+        import { notificationService } from './js/services/notificationService.js';
+        
+        // Initialize notification center
+        const notificationCenter = new NotificationCenter();
+        
+        // Make globally accessible
+        window.notificationCenter = notificationCenter;
+        window.notificationService = notificationService;
+    </script>
+    
+    <!-- 徽章系统 -->
+    <script type="module">
+        import { Badge } from './js/models/Badge.js';
+        import { BadgeManager } from './js/modules/badgeManager.js';
+        import { StreakTracker } from './js/modules/streakTracker.js';
+        
+        // Simple storage manager for badge system
+        const storageManager = {
+            namespace: 'lifeflow',
+            load(key) {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            },
+            save(key, value) {
+                localStorage.setItem(key, JSON.stringify(value));
+            },
+            loadExercises() {
+                return this.load('lifeflow_exercises') || [];
+            },
+            loadLearningActivities() {
+                return this.load('lifeflow_learnings') || [];
+            },
+            notifyListeners(event, data) {
+                // Trigger custom event for badge updates
+                window.dispatchEvent(new CustomEvent(event, { detail: data }));
+            }
+        };
+        
+        // Initialize badge manager
+        const badgeManager = new BadgeManager(storageManager);
+        
+        // Make it globally accessible
+        window.badgeManager = badgeManager;
+        
+        /**
+         * Render badges for a specific type
+         */
+        function renderBadges(type) {
+            const containerId = type === 'exercise' ? 'exerciseBadges' : 'learningBadges';
+            const container = document.getElementById(containerId);
+            
+            if (!container) return;
+            
+            // Get current streak
+            const currentStreak = badgeManager.getCurrentStreak(type);
+            
+            // Get badge progress
+            const badgeProgress = badgeManager.getBadgeProgress(type, currentStreak);
+            
+            if (badgeProgress.length === 0) {
+                container.innerHTML = '<div class="empty-badges">暂无徽章</div>';
+                return;
+            }
+            
+            // Render each badge
+            container.innerHTML = badgeProgress.map(badge => {
+                const earnedClass = badge.earned ? 'earned' : 'unearned';
+                const progressPercent = Math.round(badge.progress);
+                const progressText = badge.earned 
+                    ? '已获得' 
+                    : `${badge.currentStreak}/${badge.requirement} 天`;
+                
+                const earnedDateText = badge.earned && badge.earnedDate
+                    ? `获得于 ${formatDate(badge.earnedDate)}`
+                    : '';
+                
+                const tooltipText = badge.earned
+                    ? `${badge.name} - ${badge.description}\\n${earnedDateText}`
+                    : `${badge.name} - ${badge.description}\\n进度: ${progressText}`;
+                
+                return `
+                    <div class="badge-item ${earnedClass}" data-badge-id="${badge.id}">
+                        <div class="badge-tooltip">${tooltipText.replace(/\\n/g, '<br>')}</div>
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-name">${badge.name}</div>
+                        <div class="badge-description">${badge.description}</div>
+                        ${badge.earned 
+                            ? `<div class="badge-earned-date">✓ ${earnedDateText}</div>`
+                            : `
+                                <div class="badge-progress">${progressText}</div>
+                                <div class="badge-progress-bar">
+                                    <div class="badge-progress-fill" style="width: ${progressPercent}%"></div>
+                                </div>
+                            `
+                        }
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        /**
+         * Format date for display
+         */
+        function formatDate(isoDate) {
+            const date = new Date(isoDate);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        /**
+         * Initialize badge display
+         */
+        function initBadgeDisplay() {
+            // Check and award badges based on current streaks
+            badgeManager.checkAndAwardBadges();
+            
+            // Render badges for both types
+            renderBadges('exercise');
+            renderBadges('learning');
+        }
+        
+        /**
+         * Update badge display when badges change
+         */
+        function updateBadgeDisplay() {
+            renderBadges('exercise');
+            renderBadges('learning');
+        }
+        
+        // Listen for badge updates
+        window.addEventListener('badges:updated', updateBadgeDisplay);
+        
+        // Initialize on page load
+        initBadgeDisplay();
+        
+        // Refresh badges periodically (every 30 seconds)
+        setInterval(() => {
+            badgeManager.checkAndAwardBadges();
+            updateBadgeDisplay();
+        }, 30000);
+        
+        // Make functions globally accessible for debugging
+        window.renderBadges = renderBadges;
+        window.updateBadgeDisplay = updateBadgeDisplay;
+    </script>
+    
+    <!-- Export Modal System -->
+    <script type="module">
+        import { StorageManager } from './js/utils/storage.js';
+        import { ExportModal } from './js/components/exportModal.js';
+        
+        // Initialize storage manager for export
+        const exportStorageManager = new StorageManager('lifeflow');
+        
+        // Initialize export modal
+        const exportModal = new ExportModal(exportStorageManager);
+        
+        // Make globally accessible
+        window.exportModal = exportModal;
+        
+        // Attach to export button
+        document.getElementById('openExportModal').addEventListener('click', () => {
+            exportModal.open();
+        });
+    </script>
+    
+    <!-- Backup/Restore Modal System -->
+    <script type="module">
+        import { StorageManager } from './js/utils/storage.js';
+        import { BackupRestoreModal } from './js/components/backupRestoreModal.js';
+        
+        // Initialize storage manager for backup/restore
+        const backupStorageManager = new StorageManager('lifeflow');
+        
+        // Initialize backup/restore modal
+        const backupRestoreModal = new BackupRestoreModal(backupStorageManager);
+        
+        // Make globally accessible
+        window.backupRestoreModal = backupRestoreModal;
+        
+        // Attach to backup button
+        document.getElementById('openBackupModal').addEventListener('click', () => {
+            backupRestoreModal.open();
+        });
+    </script>
+    
+    <footer style="background: rgba(255,255,255,0.95); margin-top: 40px; margin-left: -20px; margin-right: -20px; padding: 30px 20px; box-shadow: 0 -4px 12px rgba(0,0,0,0.1); text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="color: #2C3E50; margin-bottom: 10px;">🌟 LifeFlow</h4>
+                    <p style="color: #7F8C8D; font-size: 14px;">智能生活助手，帮助您管理生活、运动和学习</p>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="color: #2C3E50; margin-bottom: 10px;">快速链接</h4>
+                    <div style="display: flex; flex-direction: row; gap: 16px; flex-wrap: wrap; justify-content: center;">
+                        <a href="index.html" style="color: #667eea; text-decoration: none; font-size: 14px;">首页</a>
+                        <a href="life.html" style="color: #667eea; text-decoration: none; font-size: 14px;">生活管家</a>
+                        <a href="exercise.html" style="color: #667eea; text-decoration: none; font-size: 14px;">运动伴侣</a>
+                        <a href="learning.html" style="color: #667eea; text-decoration: none; font-size: 14px;">学习助手</a>
+                    </div>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="color: #2C3E50; margin-bottom: 10px;">关于</h4>
+                    <p style="color: #7F8C8D; font-size: 14px;">版本 v3.0.0</p>
+                    <p style="color: #7F8C8D; font-size: 14px;">© 2025 LifeFlow</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #E0E6ED; padding-top: 20px;">
+                <p style="color: #95A5A6; font-size: 12px; margin: 0;">Made with ❤️ by LifeFlow Team</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
