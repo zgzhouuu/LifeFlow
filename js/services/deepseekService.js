@@ -4,7 +4,7 @@
  */
 class DeepSeekService {
     constructor() {
-        this.apiKey = 'sk-3e9ea6e416b1483aa2cef4cf8f9412a2'; // 默认API Key
+        this.apiKey = 'sk-xxxx'; // 默认API Key
         this.baseURL = 'https://api.deepseek.com/v1';
         this.model = 'deepseek-chat';
         this.conversationHistory = [];
@@ -390,3 +390,4 @@ class DeepSeekService {
 
 // 创建全局实例
 const deepseekService = new DeepSeekService();
+
